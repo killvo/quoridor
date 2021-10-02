@@ -7,13 +7,15 @@ export interface IGameReducerState {
   gameStarted: boolean;
   board: any;
   results: any;
+  status: string;
 }
 
 const initialState: IGameReducerState = {
   loading: false,
   gameStarted: false,
   board: {},
-  results: {}
+  results: {},
+  status: ''
 };
 
 export const gameReducer = (state = initialState, action: Routine<any>) => {

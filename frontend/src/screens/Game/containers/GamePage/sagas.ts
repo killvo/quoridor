@@ -7,8 +7,8 @@ import { startGame } from '@screens/Game/services/game.service';
 
 function* tryStartGame({ payload }: PayloadAction<IGameStartRequest>) {
   try {
-    yield call(startGame, payload);
-    yield put(startGameRoutine.success());
+    const response = yield call(startGame, payload);
+    yield put(startGameRoutine.success(response));
     toastr.success('Success', 'Game started!');
   } catch (e) {
     toastr.error('Can\'t start the game', e?.message);
