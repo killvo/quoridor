@@ -1,9 +1,9 @@
 package com.quebec.core.domains.game;
 
+import com.quebec.core.domains.game.dto.GameStartRequest;
+import com.quebec.core.domains.game.dto.GameStartResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("game")
@@ -15,8 +15,8 @@ public class GameController {
         this.gameService = gameService;
     }
 
-    @GetMapping("test")
-    public String getTestMessage() {
-        return gameService.testMethod();
+    @PostMapping("start")
+    public GameStartResponse getTestMessage(@RequestBody GameStartRequest request) {
+        return gameService.startGame(request);
     }
 }
