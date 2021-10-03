@@ -1,7 +1,7 @@
 package com.quebec.core.domains.game;
 
-import com.quebec.core.domains.game.dto.GameStartRequest;
-import com.quebec.core.domains.game.dto.GameStartResponse;
+import com.quebec.core.domains.game.dto.GameStartWithBotResponse;
+import com.quebec.core.domains.game.dto.GameStartWithPlayersResponse;
 import com.quebec.core.domains.game.dto.MovePlaceWallRequest;
 import com.quebec.core.domains.game.dto.MovePlaceWallResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +18,21 @@ public class GameController {
     }
 
     @PostMapping("start_two_people")
-    public void start2people() {
-        gameService.startTwoPeople();
+    public GameStartWithPlayersResponse start2people() {
+        return gameService.startTwoPeople();
     }
 
     @PostMapping("start_with_bot")
-    public void startWithBot() {
-        gameService.startWithBot();
+    public GameStartWithBotResponse startWithBot() {
+        return gameService.startWithBot();
     }
 
     @PostMapping("move_place_wall")
     public MovePlaceWallResponse placeWall(@RequestBody MovePlaceWallRequest request) {
         return gameService.placeWall(request);
     }
+
+    // TODO: create controller that make player change position move
+
+    // TODO: create controller that make bot move
 }
