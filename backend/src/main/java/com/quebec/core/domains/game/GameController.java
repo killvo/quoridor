@@ -17,11 +17,6 @@ public class GameController {
         this.gameService = gameService;
     }
 
-//    @PostMapping("start")
-//    public GameStartResponse getTestMessage(@RequestBody GameStartRequest request) {
-//        return gameService.startGame(request);
-//    }
-
     @PostMapping("start_two_people")
     public void start2people() {
         gameService.startTwoPeople();

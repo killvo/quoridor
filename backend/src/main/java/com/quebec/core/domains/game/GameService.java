@@ -1,41 +1,26 @@
 package com.quebec.core.domains.game;
 
-import com.quebec.core.domains.game.dto.GameStartRequest;
-import com.quebec.core.domains.game.dto.GameStartResponse;
 import com.quebec.core.domains.game.dto.MovePlaceWallRequest;
 import com.quebec.core.domains.game.dto.MovePlaceWallResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.quebec.core.domains.player.PlayerService;
 import org.springframework.stereotype.Service;
 
 @Service
 public class GameService {
     private Game game;
-    private GameWithPlayer gameWithPlayer;
-    private GameWithBot gameWithBot;
+    private PlayerService playerService;
 
-    public GameService(GameWithPlayer gameWithPlayer, GameWithBot gameWithBot) {
-        this.gameWithPlayer = gameWithPlayer;
-        this.gameWithBot = gameWithBot;
+    public GameService(Game game, PlayerService playerService) {
+        this.game = game;
+        this.playerService = playerService;
     }
 
-    //    public GameStartResponse startGame(GameStartRequest request) {
-//        var response = new GameStartResponse(
-//                "FirstPlayerName: " + request.getFirstPlayerName()
-//                        + "\nSecondPlayerName: " + request.getSecondPlayerName()
-//        );
-//        return response;
-//    }
-
-    public void startTwoPeople() {
-        this.game = gameWithPlayer;
-//        game.setPlayer1(new ViewPlayer());
-//        game.setPlayer2(new ViewPlayer());
+    public boolean startTwoPeople() {
+        return false;
     }
 
-    public void startWithBot() {
-        this.game = gameWithBot;
-//        game.setPlayer1(new ViewPlayer());
-//        game.setPlayer2(new Bot());
+    public boolean startWithBot() {
+        return false;
     }
 
     public MovePlaceWallResponse placeWall(MovePlaceWallRequest request) {

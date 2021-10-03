@@ -1,6 +1,6 @@
 package com.quebec.core.domains.game.dto;
 
-import com.quebec.core.domains.game.Orientation;
+import com.quebec.core.domains.game.model.Orientation;
 import lombok.Data;
 
 @Data

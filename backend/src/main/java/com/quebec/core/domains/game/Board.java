@@ -1,5 +1,6 @@
 package com.quebec.core.domains.game;
 
+import com.quebec.core.domains.game.model.Orientation;
 import org.springframework.stereotype.Component;
 
 @Component
