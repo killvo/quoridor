@@ -3,9 +3,12 @@ package com.quebec.core.domains.game.dto;
 import com.quebec.core.domains.game.model.Orientation;
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
-public class MovePlaceWallRequest {
-    private int x_corner;
-    private int y_corner;
+public class PlaceWallRequest {
+    private UUID id;
+    private int xCorner;
+    private int yCorner;
     private Orientation orientation;
 }

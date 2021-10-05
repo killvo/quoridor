@@ -1,9 +1,10 @@
 package com.quebec.core.domains.game;
 
+import com.quebec.core.domains.board.BoardService;
 import com.quebec.core.domains.game.dto.GameStartWithBotResponse;
 import com.quebec.core.domains.game.dto.GameStartWithPlayersResponse;
-import com.quebec.core.domains.game.dto.MovePlaceWallRequest;
-import com.quebec.core.domains.game.dto.MovePlaceWallResponse;
+import com.quebec.core.domains.game.dto.PlaceWallRequest;
+import com.quebec.core.domains.game.dto.PlaceWallResponse;
 import com.quebec.core.domains.player.PlayerService;
 import com.quebec.core.domains.player.model.Player;
 import com.quebec.core.domains.player.model.Role;
@@ -11,12 +12,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class GameService {
-    private Game game;
     private PlayerService playerService;
+    private BoardService boardService;
+    // TODO: add Bot here
 
-    public GameService(Game game, PlayerService playerService) {
-        this.game = game;
+    public GameService(PlayerService playerService, BoardService boardService) {
         this.playerService = playerService;
+        this.boardService = boardService;
     }
 
     public GameStartWithPlayersResponse startTwoPeople() {
@@ -40,7 +42,7 @@ public class GameService {
         5. Return move results
         */
 
-    public MovePlaceWallResponse placeWall(MovePlaceWallRequest request) {
+    public PlaceWallResponse placeWall(PlaceWallRequest request) {
         /*
         1. Get player id from MovePlaceWallRequest
         2. Get Player object from PlayerService by id
@@ -49,8 +51,8 @@ public class GameService {
         5. Call method from Game object(need to transfer player id) and place wall
         6. Return move results
         */
-        int result = game.placeWall(request.getX_corner(), request.getY_corner(), request.getOrientation());
-        return new MovePlaceWallResponse(result);
+        //int result = game.placeWall(request.getX_corner(), request.getY_corner(), request.getOrientation());
+        return new PlaceWallResponse();
     }
 
     // TODO: add method that return bot move
