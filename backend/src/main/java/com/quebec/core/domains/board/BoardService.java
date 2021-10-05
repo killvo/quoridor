@@ -1,5 +1,6 @@
 package com.quebec.core.domains.board;
 
+import com.quebec.core.domains.board.dto.StartGamePlayers;
 import com.quebec.core.domains.game.dto.MakeMoveRequest;
 import com.quebec.core.domains.game.dto.MakeMoveResponse;
 import com.quebec.core.domains.game.dto.PlaceWallRequest;
@@ -13,6 +14,12 @@ public class BoardService {
 
     public BoardService(BoardRepository boardRepository) {
         this.boardRepository = boardRepository;
+    }
+
+    public boolean startGame(StartGamePlayers players) {
+        boardRepository.initBoard();
+        boardRepository.initPlayers(players.getFirstPlayerId(), players.getSecondPlayerId());
+        return true;
     }
 
     public PlaceWallResponse placeWall(PlaceWallRequest request){
