@@ -2,8 +2,8 @@ package com.quebec.core.domains.game;
 
 import com.quebec.core.domains.game.dto.GameStartWithBotResponse;
 import com.quebec.core.domains.game.dto.GameStartWithPlayersResponse;
-import com.quebec.core.domains.game.dto.MovePlaceWallRequest;
-import com.quebec.core.domains.game.dto.MovePlaceWallResponse;
+import com.quebec.core.domains.game.dto.PlaceWallRequest;
+import com.quebec.core.domains.game.dto.PlaceWallResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +28,7 @@ public class GameController {
     }
 
     @PostMapping("move_place_wall")
-    public MovePlaceWallResponse placeWall(@RequestBody MovePlaceWallRequest request) {
+    public PlaceWallResponse placeWall(@RequestBody PlaceWallRequest request) {
         return gameService.placeWall(request);
     }
 
