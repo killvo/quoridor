@@ -1,4 +1,4 @@
-package com.quebec.core.domains.game.model;
+package com.quebec.core.domains.move.model;
 
 public enum Orientation {
     VERTICAL, HORIZONTAL

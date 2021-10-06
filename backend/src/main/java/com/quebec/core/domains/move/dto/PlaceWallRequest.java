@@ -1,6 +1,6 @@
-package com.quebec.core.domains.game.dto;
+package com.quebec.core.domains.move.dto;
 
-import com.quebec.core.domains.game.model.Orientation;
+import com.quebec.core.domains.move.model.Orientation;
 import lombok.Data;
 
 import java.util.UUID;

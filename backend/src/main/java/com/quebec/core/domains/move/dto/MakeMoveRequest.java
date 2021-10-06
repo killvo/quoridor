@@ -1,4 +1,4 @@
-package com.quebec.core.domains.game.dto;
+package com.quebec.core.domains.move.dto;
 
 import lombok.Data;
 
