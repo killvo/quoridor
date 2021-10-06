@@ -1,4 +1,4 @@
-package com.quebec.core.domains.game.dto;
+package com.quebec.core.domains.move.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,8 +9,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MakeMoveResponse {
+public class PlaceWallResponse {
     private UUID id;
-    private int xCorner;
-    private int yCorner;
+    private int wallsCount;
 }

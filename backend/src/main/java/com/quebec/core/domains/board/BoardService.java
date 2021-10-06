@@ -1,10 +1,10 @@
 package com.quebec.core.domains.board;
 
 import com.quebec.core.domains.board.dto.StartGamePlayers;
-import com.quebec.core.domains.game.dto.MakeMoveRequest;
-import com.quebec.core.domains.game.dto.MakeMoveResponse;
-import com.quebec.core.domains.game.dto.PlaceWallRequest;
-import com.quebec.core.domains.game.dto.PlaceWallResponse;
+import com.quebec.core.domains.move.dto.MakeMoveRequest;
+import com.quebec.core.domains.move.dto.MakeMoveResponse;
+import com.quebec.core.domains.move.dto.PlaceWallRequest;
+import com.quebec.core.domains.move.dto.PlaceWallResponse;
 import org.springframework.stereotype.Service;
 
 @Service
