@@ -35,6 +35,7 @@ public class GameInitService {
 
     public void resetGame() {
         boardService.resetBoard();
-        // Треба додати метод очистки гравців
+        boardService.resetPlayers();
+        playerService.removePlayers();
     }
 }

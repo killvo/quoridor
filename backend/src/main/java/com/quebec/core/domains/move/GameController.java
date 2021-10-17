@@ -26,7 +26,7 @@ public class GameController {
     }
 
     @PostMapping("bot_move")
-    public BotResponse placeWall() {
+    public BotResponse getBotMove() {
         return gameService.getBotMove();
     }
 }

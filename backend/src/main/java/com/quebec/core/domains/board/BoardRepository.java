@@ -1,5 +1,6 @@
 package com.quebec.core.domains.board;
 
+import com.quebec.core.domains.board.dto.StartGamePlayers;
 import com.quebec.core.domains.board.exceptions.InvalidBoardException;
 import com.quebec.core.domains.board.exceptions.PlayerNotFoundOnBoardException;
 import com.quebec.core.domains.move.model.Orientation;
@@ -66,11 +67,10 @@ public class BoardRepository {
         return name.charAt(1);
     }
 
-    public boolean initPlayers(UUID firstPlayerId, UUID secondPlayerId) {
+    public void initPlayers(StartGamePlayers players) {
         playersPositions = new HashMap<>();
-        playersPositions.put(firstPlayerId, "04");
-        playersPositions.put(secondPlayerId, "84");
-        return true;
+        playersPositions.put(players.getFirstPlayerId(), "04");
+        playersPositions.put(players.getSecondPlayerId(), "84");
     }
 
     public String makeMove(UUID playerId, int x, int y) {

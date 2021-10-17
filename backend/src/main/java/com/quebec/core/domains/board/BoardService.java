@@ -16,10 +16,9 @@ public class BoardService {
         this.boardRepository = boardRepository;
     }
 
-    public boolean startGame(StartGamePlayers players) {
+    public void startGame(StartGamePlayers players) {
         boardRepository.initBoard();
-        boardRepository.initPlayers(players.getFirstPlayerId(), players.getSecondPlayerId());
-        return true;
+        boardRepository.initPlayers(players);
     }
 
     public PlaceWallResponse placeWall(PlaceWallRequest request){
@@ -34,5 +33,9 @@ public class BoardService {
 
     public void resetBoard() {
         boardRepository.resetBoard();
+    }
+
+    public void resetPlayers() {
+        boardRepository.resetPlayers();
     }
 }

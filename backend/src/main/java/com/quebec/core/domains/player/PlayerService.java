@@ -8,6 +8,8 @@ import com.quebec.core.domains.player.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -49,5 +51,16 @@ public class PlayerService {
 
     private boolean isPlayerIncorrect(Player player) {
         return player == null || player.getId() == null || player.getAvailableWallsCount() == null || player.getRole() == null;
+    }
+
+    public Optional<Player> getBotPlayer() {
+        Collection<Player> players = playerRepository.getAll().orElseThrow();
+        return players.stream()
+                .filter(player -> player.getRole() == Role.BOT)
+                .findAny();
+    }
+
+    public void removePlayers() {
+        playerRepository.removePlayers();
     }
 }
