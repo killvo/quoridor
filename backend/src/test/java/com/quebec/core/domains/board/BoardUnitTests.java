@@ -9,9 +9,4 @@ public class BoardUnitTests {
     @Autowired
     private BoardRepository boardRepository;
 
-    @Test
-    public void whenBoardInit_shouldSucceed() {
-        boardRepository.initBoard();
-
-    }
 }
