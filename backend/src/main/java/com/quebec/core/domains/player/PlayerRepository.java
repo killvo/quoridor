@@ -4,10 +4,7 @@ import com.quebec.core.domains.player.model.Player;
 import com.quebec.core.domains.player.model.Role;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Component
 public class PlayerRepository {
@@ -18,6 +15,10 @@ public class PlayerRepository {
 
     public PlayerRepository() {
         this.players = new HashMap<>();
+    }
+
+    public Optional<Collection<Player>> getAll() {
+        return Optional.of(players.values());
     }
 
     public Optional<Player> getById(UUID id) {
@@ -74,5 +75,9 @@ public class PlayerRepository {
             return Optional.empty();
         }
         return Optional.of(updatedPlayerOptional.get().getAvailableWallsCount());
+    }
+
+    public void removePlayers() {
+        players.clear();
     }
 }
