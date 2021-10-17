@@ -32,7 +32,7 @@ public class BoardService {
         return new MakeMoveResponse();
     }
 
-    public boolean resetBoard() {
-        return boardRepository.resetBoard();
+    public void resetBoard() {
+        boardRepository.resetBoard();
     }
 }

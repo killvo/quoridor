@@ -1,6 +1,11 @@
 package com.quebec.core.domains.board;
 
-import com.quebec.core.domains.board.exceptions.InvalidXYException;
+import com.quebec.core.domains.board.exceptions.InvalidBoardException;
+import com.quebec.core.domains.board.exceptions.PlayerNotFoundOnBoardException;
+import com.quebec.core.domains.move.model.Orientation;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -9,19 +14,56 @@ import java.util.UUID;
 
 @Component
 public class BoardRepository {
-    private int [][] tiles;
+    private Graph<String, DefaultEdge> board;
     private Map<UUID, String> playersPositions;
+    private final int VERTICES_AMOUNT = 81;
 
     public BoardRepository() {
     }
 
-    public int[][] getBoard() {
-        return tiles;
+    public Graph<String, DefaultEdge> getBoard() {
+        return board;
     }
 
-    public boolean initBoard() {
-        tiles = new int[9][9];
-        return true;
+    public void initBoard() {
+        board = new SimpleGraph<>(DefaultEdge.class);
+        addAllVertices();
+        addAllEdges();
+    }
+
+    private void addAllVertices() {
+        for (int x = 0; x < 9; x++) {
+            for (int y = 0; y < 9; y++) {
+                board.addVertex(getName(x, y));
+            }
+        }
+    }
+
+    private void addAllEdges() {
+        for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++) {
+                board.addEdge(getName(x, y), getName(x, y + 1));
+                board.addEdge(getName(x, y), getName(x + 1, y));
+                if (x == 7) {
+                    board.addEdge(getName(8, y), getName(8, y + 1));
+                }
+                if (y == 7) {
+                    board.addEdge(getName(x, 8), getName(x + 1, 8));
+                }
+            }
+        }
+    }
+
+    private String getName(int x, int y) {
+        return x + "" + y;
+    }
+
+    private int getX(String name) {
+        return name.charAt(0);
+    }
+
+    private int getY(String name) {
+        return name.charAt(1);
     }
 
     public boolean initPlayers(UUID firstPlayerId, UUID secondPlayerId) {
@@ -31,33 +73,44 @@ public class BoardRepository {
         return true;
     }
 
-    public int getByXY(int xCorner, int yCorner) {
-        try {
-            return tiles[xCorner][yCorner];
-        } catch (IndexOutOfBoundsException e) {
-            throw new InvalidXYException("X or Y corner value out of bounds.");
+    public String makeMove(UUID playerId, int x, int y) {
+        checkBoardOnValid();
+        if (!playersPositions.containsKey(playerId)) {
+            throw new PlayerNotFoundOnBoardException("Player with given id not found on game board.");
+        }
+        String nextPosition = getName(x, y);
+        playersPositions.put(playerId, nextPosition);
+        return nextPosition;
+    }
+
+    private void checkBoardOnValid() {
+        if (isBoardIncorrect()) {
+            throw new InvalidBoardException("The board is not created or created incorrect.");
         }
     }
 
-    public void setBoard(int[][] board) {
-        this.tiles = board;
+    private boolean isBoardIncorrect() {
+        return board == null || board.vertexSet().size() != VERTICES_AMOUNT || board.edgeSet().size() == 0;
     }
 
-    public void setByXY(int xCorner, int yCorner, int value) {
-        try {
-            tiles[xCorner][yCorner] = value;
-        } catch (IndexOutOfBoundsException e) {
-            throw new InvalidXYException("X or Y corner value out of bounds.");
+    public String placeWall(int x, int y, Orientation orientation) {
+        checkBoardOnValid();
+        if (orientation == Orientation.VERTICAL) {
+            board.removeEdge(getName(x, y), getName(x + 1, y));
+            board.removeEdge(getName(x, y + 1), getName(x + 1, y + 1));
+        } else {
+            board.removeEdge(getName(x, y), getName(x, y + 1));
+            board.removeEdge(getName(x + 1, y), getName(x + 1, y + 1));
         }
+        return getName(x, y);
     }
 
-    public boolean resetBoard() {
-        tiles = new int[9][9];
-        return false;
+
+    public void resetBoard() {
+        board = new SimpleGraph<>(DefaultEdge.class);
     }
 
-    public boolean resetPlayers() {
+    public void resetPlayers() {
         playersPositions = new HashMap<>();
-        return false;
     }
 }
