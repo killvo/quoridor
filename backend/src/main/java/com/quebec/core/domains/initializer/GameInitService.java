@@ -33,8 +33,8 @@ public class GameInitService {
         return new GameStartWithBotResponse(player1);
     }
 
-    public boolean resetGame() {
-        return boardService.resetBoard();
+    public void resetGame() {
+        boardService.resetBoard();
         // Треба додати метод очистки гравців
     }
 }

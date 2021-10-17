@@ -28,7 +28,7 @@ public class GameInitController {
     }
 
     @PostMapping("reset")
-    public boolean resetGame() {
-        return gameInitService.resetGame();
+    public void resetGame() {
+        gameInitService.resetGame();
     }
 }

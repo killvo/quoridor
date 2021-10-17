@@ -1,6 +1,6 @@
 package com.quebec.core.domains.bot.dto;
 
-import com.quebec.core.domains.game.model.Orientation;
+import com.quebec.core.domains.move.model.Orientation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
