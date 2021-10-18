@@ -67,6 +67,10 @@ public class BoardRepository {
         return name.charAt(1);
     }
 
+    public Map<UUID, String> getPlayersPositions() {
+        return playersPositions;
+    }
+
     public void initPlayers(StartGamePlayers players) {
         playersPositions = new HashMap<>();
         playersPositions.put(players.getFirstPlayerId(), "04");
