@@ -9,6 +9,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class Player {
     private UUID id;
-    private Integer availableWallsCount;
+    private Integer availableWallsAmount;
     private Role role;
 }

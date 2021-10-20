@@ -1,23 +1,22 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects';
 import { toastr } from 'react-redux-toastr';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { startGameRoutine } from '@screens/Game/routines';
-import { IGameStartRequest } from '@screens/Game/model/GameStartRequest';
-import { startGame } from '@screens/Game/services/game.service';
+import { startTwoPeopleGame } from '@screens/Game/services/game.service';
+import { startTwoPeopleGameRoutine } from '@screens/Game/routines';
 
-function* tryStartGame({ payload }: PayloadAction<IGameStartRequest>) {
+function* tryStartTwoPeopleGame() {
   try {
-    const response = yield call(startGame, payload);
-    yield put(startGameRoutine.success(response));
-    toastr.success('Success', 'Game started!');
+    const response = yield call(startTwoPeopleGame);
+    yield put(startTwoPeopleGameRoutine.success(response));
+    toastr.success('Success', 'Game with two people started!');
   } catch (e) {
-    toastr.error('Can\'t start the game', e?.message);
-    yield put(startGameRoutine.failure(e?.message));
+    toastr.error('Can\'t start the game with two people', e?.message);
+    yield put(startTwoPeopleGameRoutine.failure(e?.message));
   }
 }
 
 export default function* spacesSagas() {
   yield all([
-    yield takeEvery(startGameRoutine.TRIGGER, tryStartGame)
+    yield takeEvery(startTwoPeopleGameRoutine.TRIGGER, tryStartTwoPeopleGame)
   ]);
 }
