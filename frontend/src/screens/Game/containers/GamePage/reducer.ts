@@ -42,6 +42,13 @@ export const gameReducer = (state = initialState, action: Routine<any>) => {
         firstPlayer: payload.firstPlayer,
         secondPlayer: payload.secondPlayer
       };
+    case startWithBotGameRoutine.SUCCESS:
+      const payload2 = (action.payload as IStartWithBotResponse);
+      return {
+        ...state,
+        firstPlayer: payload2.firstPlayer,
+        secondPlayer: payload2.botPlayer
+      };
     default:
       return state;
   }
