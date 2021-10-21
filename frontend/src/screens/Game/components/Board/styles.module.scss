@@ -1,0 +1,9 @@
+@import "src/styles/variables";
+
+.container {
+  display: grid;
+  gap: 20px;
+  width: 900px;
+  height: 900px;
+  background-color: $boardBackgroundDarkColor;
+}

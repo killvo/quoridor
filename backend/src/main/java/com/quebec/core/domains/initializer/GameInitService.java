@@ -30,7 +30,7 @@ public class GameInitService {
         Player player1 = playerService.createNewPlayer(Role.PLAYER, FinishLine.BOTTOM);
         Player player2 = playerService.createNewPlayer(Role.BOT, FinishLine.TOP);
         boardService.startGame(player1, player2);
-        return new GameStartWithBotResponse(player1);
+        return new GameStartWithBotResponse(player1, player2);
     }
 
     public void resetGame() {

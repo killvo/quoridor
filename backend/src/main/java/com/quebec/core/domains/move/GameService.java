@@ -35,7 +35,7 @@ public class GameService {
 
     public PlaceWallResponse placeWall(PlaceWallRequest request) {
         Player player = playerService.getPlayer(request.getId());
-        if (player.getAvailableWallsCount() <= 0) {
+        if (player.getAvailableWallsAmount() <= 0) {
             throw new NotEnoughWallsException("Not enough available walls to place.");
         }
         PlaceWallResponse response = boardService.placeWall(request);

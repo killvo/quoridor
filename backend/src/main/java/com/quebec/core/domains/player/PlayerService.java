@@ -51,7 +51,7 @@ public class PlayerService {
     }
 
     private boolean isPlayerIncorrect(Player player) {
-        return player == null || player.getId() == null || player.getAvailableWallsCount() == null || player.getRole() == null;
+        return player == null || player.getId() == null || player.getAvailableWallsAmount() == null || player.getRole() == null;
     }
 
     public Optional<Player> getBotPlayer() {

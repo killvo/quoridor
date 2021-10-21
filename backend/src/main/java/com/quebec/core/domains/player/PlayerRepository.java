@@ -41,7 +41,10 @@ public class PlayerRepository {
             return Optional.empty();
         }
         UUID id = UUID.randomUUID();
-        Player player = players.put(id, new Player(id, MAX_WALLS_COUNT, role, finishLine));
+
+        players.put(id, new Player(id, MAX_WALLS_COUNT, role, finishLine));
+        Player player = players.get(id);
+
         if (player == null) {
             return Optional.empty();
         }
@@ -66,16 +69,16 @@ public class PlayerRepository {
             return Optional.empty();
         }
         Player player = playerOptional.get();
-        int availableWalls = player.getAvailableWallsCount();
+        int availableWalls = player.getAvailableWallsAmount();
         if (availableWalls == 0) {
             return Optional.empty();
         }
-        player.setAvailableWallsCount(--availableWalls);
+        player.setAvailableWallsAmount(--availableWalls);
         var updatedPlayerOptional = update(player);
         if (updatedPlayerOptional.isEmpty()) {
             return Optional.empty();
         }
-        return Optional.of(updatedPlayerOptional.get().getAvailableWallsCount());
+        return Optional.of(updatedPlayerOptional.get().getAvailableWallsAmount());
     }
 
     public void removePlayers() {

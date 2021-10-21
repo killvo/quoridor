@@ -8,4 +8,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class GameStartWithBotResponse {
     private Player firstPlayer;
+    private Player botPlayer;
 }
