@@ -14,8 +14,16 @@ import java.util.*;
 public class MoveValidator {
 
     public boolean isMoveWallPlaceValid(Graph<String, DefaultEdge> board, Orientation[][] walls, PlaceWallRequest request) {
-        //TODO: Add validation
-        return false;
+        int x = request.getXCorner();
+        int y = request.getYCorner();
+        if (request.getOrientation() == Orientation.VERTICAL) {
+            if (x >= 1 && walls[x-1][y] == Orientation.VERTICAL) return false;
+            if (x <= 7 && walls[x+1][y] == Orientation.VERTICAL) return false;
+        } else {
+            if (y >= 1 && walls[x][y-1] == Orientation.HORIZONTAL) return false;
+            if (y <= 7 && walls[x][y+1] == Orientation.HORIZONTAL) return false;
+        }
+        return true;
     }
 
     public boolean isMovePlayerValid(Graph<String, DefaultEdge> board, MakeMoveRequest request, Map<UUID, String> playerPositions) {
