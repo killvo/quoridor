@@ -16,6 +16,7 @@ import java.util.UUID;
 @Component
 public class BoardRepository {
     private Graph<String, DefaultEdge> board;
+    private Orientation[][] walls;
     private Map<UUID, String> playersPositions;
     private final int VERTICES_AMOUNT = 81;
 
@@ -28,6 +29,7 @@ public class BoardRepository {
 
     public void initBoard() {
         board = new SimpleGraph<>(DefaultEdge.class);
+        walls = new Orientation[8][8];
         addAllVertices();
         addAllEdges();
     }
@@ -71,6 +73,10 @@ public class BoardRepository {
         return playersPositions;
     }
 
+    public Orientation[][] getWalls() {
+        return walls;
+    }
+
     public void initPlayers(StartGamePlayers players) {
         playersPositions = new HashMap<>();
         playersPositions.put(players.getFirstPlayerId(), "04");
@@ -99,6 +105,7 @@ public class BoardRepository {
 
     public String placeWall(int x, int y, Orientation orientation) {
         checkBoardOnValid();
+        walls[x][y] = orientation;
         if (orientation == Orientation.VERTICAL) {
             board.removeEdge(getName(x, y), getName(x + 1, y));
             board.removeEdge(getName(x, y + 1), getName(x + 1, y + 1));
@@ -107,6 +114,21 @@ public class BoardRepository {
             board.removeEdge(getName(x + 1, y), getName(x + 1, y + 1));
         }
         return getName(x, y);
+    }
+
+    public void removeWall(int x, int y) {
+        checkBoardOnValid();
+        if(walls[x][y] != null){
+            Orientation orientation = walls[x][y];
+            if (orientation == Orientation.VERTICAL) {
+                board.addEdge(getName(x, y), getName(x + 1, y));
+                board.addEdge(getName(x, y + 1), getName(x + 1, y + 1));
+            } else {
+                board.addEdge(getName(x, y), getName(x, y + 1));
+                board.addEdge(getName(x + 1, y), getName(x + 1, y + 1));
+            }
+            walls[x][y] = null;
+        }
     }
 
 
