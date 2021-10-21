@@ -1,5 +1,6 @@
 package com.quebec.core.domains.player;
 
+import com.quebec.core.domains.player.model.FinishLine;
 import com.quebec.core.domains.player.model.Player;
 import com.quebec.core.domains.player.model.Role;
 import org.springframework.stereotype.Component;
@@ -32,7 +33,7 @@ public class PlayerRepository {
         return Optional.of(player);
     }
 
-    public Optional<Player> createNewPlayer(Role role) {
+    public Optional<Player> createNewPlayer(Role role, FinishLine finishLine) {
         if (role == null) {
             return Optional.empty();
         }
@@ -40,7 +41,7 @@ public class PlayerRepository {
             return Optional.empty();
         }
         UUID id = UUID.randomUUID();
-        Player player = players.put(id, new Player(id, MAX_WALLS_COUNT, role));
+        Player player = players.put(id, new Player(id, MAX_WALLS_COUNT, role, finishLine));
         if (player == null) {
             return Optional.empty();
         }

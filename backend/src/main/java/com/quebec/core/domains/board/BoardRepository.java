@@ -1,9 +1,10 @@
 package com.quebec.core.domains.board;
 
-import com.quebec.core.domains.board.dto.StartGamePlayers;
 import com.quebec.core.domains.board.exceptions.InvalidBoardException;
 import com.quebec.core.domains.board.exceptions.PlayerNotFoundOnBoardException;
 import com.quebec.core.domains.move.model.Orientation;
+import com.quebec.core.domains.player.model.FinishLine;
+import com.quebec.core.domains.player.model.Player;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
@@ -71,10 +72,10 @@ public class BoardRepository {
         return playersPositions;
     }
 
-    public void initPlayers(StartGamePlayers players) {
+    public void initPlayers(Player player1, Player player2) {
         playersPositions = new HashMap<>();
-        playersPositions.put(players.getFirstPlayerId(), "04");
-        playersPositions.put(players.getSecondPlayerId(), "84");
+        playersPositions.put(player1.getId(), player1.getFinishLine() == FinishLine.BOTTOM ? "40" : "48");
+        playersPositions.put(player2.getId(), player2.getFinishLine() == FinishLine.BOTTOM ? "40" : "48");
     }
 
     public String makeMove(UUID playerId, int x, int y) {

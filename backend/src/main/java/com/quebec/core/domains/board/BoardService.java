@@ -1,13 +1,12 @@
 package com.quebec.core.domains.board;
 
-import com.quebec.core.domains.board.dto.StartGamePlayers;
 import com.quebec.core.domains.move.dto.MakeMoveRequest;
 import com.quebec.core.domains.move.dto.MakeMoveResponse;
 import com.quebec.core.domains.move.dto.PlaceWallRequest;
 import com.quebec.core.domains.move.dto.PlaceWallResponse;
 import com.quebec.core.domains.move.exceptions.NotPossibleMoveException;
 import com.quebec.core.domains.move.exceptions.NotPossiblePlaceWallException;
-import com.quebec.core.domains.player.PlayerService;
+import com.quebec.core.domains.player.model.Player;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,9 +19,9 @@ public class BoardService {
         this.validator = moveValidator;
     }
 
-    public void startGame(StartGamePlayers players) {
+    public void startGame(Player player1, Player player2) {
         boardRepository.initBoard();
-        boardRepository.initPlayers(players);
+        boardRepository.initPlayers(player1, player2);
     }
 
     public PlaceWallResponse placeWall(PlaceWallRequest request){

@@ -3,6 +3,7 @@ package com.quebec.core.domains.player;
 import com.quebec.core.domains.player.exceptions.IncorrectIdException;
 import com.quebec.core.domains.player.exceptions.IncorrectPlayerException;
 import com.quebec.core.domains.player.exceptions.IncorrectRoleException;
+import com.quebec.core.domains.player.model.FinishLine;
 import com.quebec.core.domains.player.model.Player;
 import com.quebec.core.domains.player.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +29,11 @@ public class PlayerService {
         return playerRepository.getById(id).orElseThrow();
     }
 
-    public Player createNewPlayer(Role role) {
+    public Player createNewPlayer(Role role, FinishLine finishLine) {
         if (role == null) {
             throw new IncorrectRoleException("Incorrect Role. NULL value");
         }
-        return playerRepository.createNewPlayer(role).orElseThrow();
+        return playerRepository.createNewPlayer(role, finishLine).orElseThrow();
     }
 
     public Player updatePlayer(Player player) {
