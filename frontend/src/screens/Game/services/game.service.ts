@@ -2,11 +2,6 @@ import { callApi } from '@helpers/api.helper';
 import { IMakeMoveRequest } from '@screens/Game/model/MakeMoveRequest';
 import { IPlaceWallRequest } from '@screens/Game/model/PlaceWallRequest';
 
-export const startTwoPeopleGame = async () => callApi({
-  endpoint: '/api/init/start_two_people',
-  method: 'POST'
-});
-
 export const gameService = {
   startTwoPeopleGame: () => callApi({
     endpoint: '/api/init/start_two_people',
