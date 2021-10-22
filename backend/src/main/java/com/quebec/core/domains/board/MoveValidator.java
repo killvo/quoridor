@@ -17,7 +17,6 @@ import java.util.*;
 @Component
 public class MoveValidator {
     PlayerService playerService;
-    BoardService boardService;
     BoardRepository boardRepository;
 
     public boolean isMoveWallPlaceValid(Graph<String, DefaultEdge> board, Orientation[][] walls, PlaceWallRequest request, Map<UUID, String> playerPositions) {
@@ -31,12 +30,11 @@ public class MoveValidator {
             if (y <= 7 && walls[x][y+1] == Orientation.HORIZONTAL) return false;
         }
         Collection<Player> players = playerService.getAll();
-        Player[] p = new Player[2];
-        players.toArray(p);
+        Player[] p = players.toArray(new Player[2]);
         boolean flag = false;
         ConnectivityInspector<String, DefaultEdge> inspector = new ConnectivityInspector<>(board);
 
-        boardService.placeWall(request);
+        boardRepository.placeWall(request.getXCorner(), request.getYCorner(), request.getOrientation());
         if (canPlayerMoveToFinish(p[0], playerPositions.get(p[0].getId()), inspector) &&
                 canPlayerMoveToFinish(p[1], playerPositions.get(p[1].getId()), inspector)) flag = true;
 
