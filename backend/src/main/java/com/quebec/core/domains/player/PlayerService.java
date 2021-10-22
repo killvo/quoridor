@@ -29,7 +29,7 @@ public class PlayerService {
         return playerRepository.getById(id).orElseThrow();
     }
 
-    public Player createNewPlayer(Role role, FinishLine finishLine) {
+    public Player createNewPlayer(Role role, String[] finishLine) {
         if (role == null) {
             throw new IncorrectRoleException("Incorrect Role. NULL value");
         }

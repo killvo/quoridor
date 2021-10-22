@@ -12,5 +12,5 @@ public class Player {
     private UUID id;
     private Integer availableWallsAmount;
     private Role role;
-    private FinishLine finishLine;
+    private String[] finishLine;
 }

@@ -33,7 +33,7 @@ public class PlayerRepository {
         return Optional.of(player);
     }
 
-    public Optional<Player> createNewPlayer(Role role, FinishLine finishLine) {
+    public Optional<Player> createNewPlayer(Role role, String[] finishLine) {
         if (role == null) {
             return Optional.empty();
         }
