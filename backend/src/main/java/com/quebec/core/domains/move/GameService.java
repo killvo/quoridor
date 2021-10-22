@@ -7,11 +7,13 @@ import com.quebec.core.domains.bot.dto.BotResponse;
 import com.quebec.core.domains.move.dto.*;
 import com.quebec.core.domains.move.exceptions.BotPlayerDoesNotExistException;
 import com.quebec.core.domains.move.exceptions.CannotPlaceWallException;
+import com.quebec.core.domains.move.exceptions.GameEndedWithWinner;
 import com.quebec.core.domains.move.exceptions.NotEnoughWallsException;
 import com.quebec.core.domains.player.PlayerService;
 import com.quebec.core.domains.player.model.Player;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 @Service
@@ -28,7 +30,10 @@ public class GameService {
 
     public MakeMoveResponse makeMove(MakeMoveRequest request) {
         Player player = playerService.getPlayer(request.getId());
-
+        MakeMoveResponse response = boardService.makeMove(request);
+        String newPosition = response.getXCorner() + "" + response.getYCorner();
+        // TODO: Decide if this form of finishing is ok
+        if (Arrays.asList(player.getFinishLine()).contains(newPosition)) throw new GameEndedWithWinner("Game over, Winner " + player.getId());
         return boardService.makeMove(request);
     }
 
