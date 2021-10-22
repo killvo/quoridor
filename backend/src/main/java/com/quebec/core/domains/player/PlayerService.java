@@ -29,6 +29,10 @@ public class PlayerService {
         return playerRepository.getById(id).orElseThrow();
     }
 
+    public Collection<Player> getAll () {
+        return playerRepository.getAll().get();
+    }
+
     public Player createNewPlayer(Role role, String[] finishLine) {
         if (role == null) {
             throw new IncorrectRoleException("Incorrect Role. NULL value");

@@ -25,7 +25,7 @@ public class BoardService {
     }
 
     public PlaceWallResponse placeWall(PlaceWallRequest request){
-        if (validator.isMoveWallPlaceValid(boardRepository.getBoard(), boardRepository.getWalls(), request)){
+        if (validator.isMoveWallPlaceValid(boardRepository.getBoard(), boardRepository.getWalls(), request, boardRepository.getPlayersPositions())){
             boardRepository.placeWall(request.getXCorner(), request.getYCorner(), request.getOrientation());
             //TODO: Relocate response creation to GameService
             return new PlaceWallResponse(request.getId(), 0);
