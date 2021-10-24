@@ -14,7 +14,17 @@ const Board: React.FC<IBoardProps> = (
     makeMove, placeWall
   }
 ) => (
-  <div className={styles.container} />
+  <div className={styles.container}>
+    <div className={styles.walls_container}>
+      walls here
+    </div>
+    <div className={styles.game_area}>
+      game area here
+    </div>
+    <div className={styles.walls_container}>
+      walls here
+    </div>
+  </div>
 );
 
 export default Board;

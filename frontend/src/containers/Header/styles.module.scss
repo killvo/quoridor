@@ -3,7 +3,7 @@
 .container {
   -webkit-box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.1);
   box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.1);
-  height: 80px;
+  height: 60px;
   position: sticky;
   top: 0;
   width: 100%;
@@ -12,13 +12,27 @@
 }
 
 .header_filler {
-  height: 5em;
+  height: 2em;
 }
 
 .wrapper {
   height: 100%;
-  display: grid;
-  grid-template-columns: 30% 1fr 1fr;
   padding-bottom: unset;
   white-space: nowrap;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  .title {
+    font-size: 22px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    letter-spacing: 0.7px;
+  }
+
+  .button {
+    display: flex;
+    align-items: center;
+  }
 }

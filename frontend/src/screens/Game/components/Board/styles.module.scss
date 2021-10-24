@@ -2,8 +2,15 @@
 
 .container {
   display: grid;
+  justify-self: center;
+  align-self: center;
   gap: 20px;
-  width: 900px;
-  height: 900px;
-  background-color: $boardBackgroundDarkColor;
+  width: 800px;
+  height: 800px;
+  background-color: $boardBackgroundLightColor;
+
+  .game_area {
+    width: 700px;
+    height: 750px;
+  }
 }
