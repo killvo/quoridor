@@ -5,6 +5,7 @@ import { IPlaceWallRequest } from '@screens/Game/model/PlaceWallRequest';
 import WallsIndicator from '@screens/Game/components/WallsIndicator';
 import { IPlayer } from '@screens/Game/model/Player';
 import styles from './styles.module.scss';
+import GameArea from "@screens/Game/components/GameArea";
 
 export interface IBoardProps {
   makeMove: IBindingCallback1<IMakeMoveRequest>;
@@ -23,7 +24,7 @@ const Board: React.FC<IBoardProps> = (
       <WallsIndicator availableWallsAmount={secondPlayer?.availableWallsAmount} />
     </div>
     <div className={styles.game_area}>
-      game area here
+      <GameArea />
     </div>
     <div className={styles.walls_container}>
       <WallsIndicator availableWallsAmount={firstPlayer?.availableWallsAmount} />

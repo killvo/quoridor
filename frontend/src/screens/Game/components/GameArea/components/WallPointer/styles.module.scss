@@ -1,0 +1,12 @@
+@import "src/styles/variables";
+
+.wall_pointer {
+  background-color: $wallPointerDarkColor;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+
+  &:hover {
+    background-color: $wallPointerHoverDarkColor;
+  }
+}
