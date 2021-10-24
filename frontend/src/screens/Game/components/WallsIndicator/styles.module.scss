@@ -1,0 +1,22 @@
+@import "src/styles/variables";
+
+.walls_indicator {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  gap: 40px;
+  align-items: center;
+  padding: 10px 40px;
+  height: 60px;
+  width: 100%;
+  background-color: $uiLightBlue;
+  border-radius: 5px;
+
+  .wall {
+    height: 50px;
+    width: 15px;
+    background-color: $wallColor;
+    transform: rotate(40deg);
+  }
+
+}

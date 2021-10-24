@@ -13,9 +13,10 @@ import MenuPanel from '@screens/Game/components/MenuPanel';
 import { IMakeMoveRequest } from '@screens/Game/model/MakeMoveRequest';
 import { IPlaceWallRequest } from '@screens/Game/model/PlaceWallRequest';
 import Board from '@screens/Game/components/Board';
-import styles from './styles.module.scss';
 import ControlsMenu from '@screens/Game/components/ControlsMenu';
 import { Orientation } from '@screens/Game/model/Orientation';
+import { IPlayer } from '@screens/Game/model/Player';
+import styles from './styles.module.scss';
 
 export interface IGamePageProps extends IActions, IState {
 }
@@ -30,12 +31,13 @@ interface IActions {
 }
 
 interface IState {
-
+  firstPlayer: IPlayer;
+  secondPlayer: IPlayer;
 }
 
 const GamePage: React.FC<IGamePageProps> = (
   {
-    startTwoPeopleGame, startWithBotGame, stopGame, restartGame, makeMove, placeWall
+    startTwoPeopleGame, startWithBotGame, stopGame, restartGame, makeMove, placeWall, firstPlayer, secondPlayer
   }
 ) => {
   const [wallOrientation, setWallOrientation] = useState<Orientation>();
@@ -56,6 +58,8 @@ const GamePage: React.FC<IGamePageProps> = (
       <Board
         makeMove={makeMove}
         placeWall={placeWall}
+        firstPlayer={firstPlayer}
+        secondPlayer={secondPlayer}
       />
       <ControlsMenu
         toggleWallOrientation={handleToggleWallOrientation}
