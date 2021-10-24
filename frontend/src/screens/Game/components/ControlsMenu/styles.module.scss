@@ -17,6 +17,12 @@
   }
 
   .wall_preview {
+    width: 150px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     .horizontal_wall {
       width: 150px;
       height: 20px;
