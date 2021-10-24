@@ -20,24 +20,30 @@ const MenuPanel: React.FC<IMenuPanelProps> = (
     <Button
       onClick={startTwoPeopleGame}
       content="Start Two People"
-      color="green"
+      color="teal"
+      fluid
       basic
     />
     <Button
       onClick={startWithBotGame}
       content="Start With Bot"
-      color="green"
+      color="teal"
+      fluid
       basic
     />
     <Button
       onClick={stopGame}
       content="Stop"
       color="red"
+      fluid
+      basic
     />
     <Button
       onClick={restartGame}
       content="Restart"
       color="purple"
+      fluid
+      basic
     />
   </div>
 );
