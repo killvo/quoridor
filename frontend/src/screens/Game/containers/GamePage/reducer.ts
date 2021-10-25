@@ -1,17 +1,15 @@
 import { Routine } from 'redux-saga-routines';
-import { createReducer, PayloadAction } from '@reduxjs/toolkit';
 import {
   startTwoPeopleGameRoutine,
-  startWithBotGameRoutine,
-  stopGameRoutine
+  startWithBotGameRoutine
 } from '@screens/Game/routines';
 import { IStartTwoPeopleResponse } from '@screens/Game/model/StartTwoPeopleResponse';
-import { IPlayer } from '@screens/Game/model/Player';
 import { IStartWithBotResponse } from '@screens/Game/model/StartWithBotResponse';
+import { IPlayerWithPosition } from '@screens/Game/model/PlayerWithPosition';
 
 export interface IGameReducerState {
-  firstPlayer: IPlayer;
-  secondPlayer: IPlayer;
+  firstPlayer: IPlayerWithPosition;
+  secondPlayer: IPlayerWithPosition;
 }
 
 const initialState: IGameReducerState = {
@@ -39,15 +37,31 @@ export const gameReducer = (state = initialState, action: Routine<any>) => {
       const payload = (action.payload as IStartTwoPeopleResponse);
       return {
         ...state,
-        firstPlayer: payload.firstPlayer,
-        secondPlayer: payload.secondPlayer
+        firstPlayer: {
+          player: payload.firstPlayer,
+          x: 4,
+          y: 8
+        },
+        secondPlayer: {
+          player: payload.secondPlayer,
+          x: 4,
+          y: 0
+        }
       };
     case startWithBotGameRoutine.SUCCESS:
       const payload2 = (action.payload as IStartWithBotResponse);
       return {
         ...state,
-        firstPlayer: payload2.firstPlayer,
-        secondPlayer: payload2.botPlayer
+        firstPlayer: {
+          player: payload2.firstPlayer,
+          x: 4,
+          y: 8
+        },
+        secondPlayer: {
+          player: payload2.botPlayer,
+          x: 4,
+          y: 0
+        }
       };
     default:
       return state;

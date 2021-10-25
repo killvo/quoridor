@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
+import React, {useState} from 'react';
+import {connect} from 'react-redux';
+import {IBindingAction, IBindingCallback1} from '@models/Callbacks';
 import {
   makeMoveRoutine,
   placeWallRoutine,
@@ -10,13 +10,15 @@ import {
   stopGameRoutine
 } from '@screens/Game/routines';
 import MenuPanel from '@screens/Game/components/MenuPanel';
-import { IMakeMoveRequest } from '@screens/Game/model/MakeMoveRequest';
-import { IPlaceWallRequest } from '@screens/Game/model/PlaceWallRequest';
+import {IMakeMoveRequest} from '@screens/Game/model/MakeMoveRequest';
+import {IPlaceWallRequest} from '@screens/Game/model/PlaceWallRequest';
 import Board from '@screens/Game/components/Board';
 import ControlsMenu from '@screens/Game/components/ControlsMenu';
-import { Orientation } from '@screens/Game/model/Orientation';
-import { IPlayer } from '@screens/Game/model/Player';
+import {Orientation} from '@screens/Game/model/Orientation';
+import {IPlayer} from '@screens/Game/model/Player';
 import styles from './styles.module.scss';
+import {extractFirstPlayer, extractSecondPlayer} from "@screens/Game/reducers";
+import {IPlayerWithPosition} from "@screens/Game/model/PlayerWithPosition";
 
 export interface IGamePageProps extends IActions, IState {
 }
@@ -31,8 +33,8 @@ interface IActions {
 }
 
 interface IState {
-  firstPlayer: IPlayer;
-  secondPlayer: IPlayer;
+  firstPlayer: IPlayerWithPosition;
+  secondPlayer: IPlayerWithPosition;
 }
 
 const GamePage: React.FC<IGamePageProps> = (
@@ -40,7 +42,7 @@ const GamePage: React.FC<IGamePageProps> = (
     startTwoPeopleGame, startWithBotGame, stopGame, restartGame, makeMove, placeWall, firstPlayer, secondPlayer
   }
 ) => {
-  const [wallOrientation, setWallOrientation] = useState<Orientation>();
+  const [wallOrientation, setWallOrientation] = useState<Orientation>(Orientation.HORIZONTAL);
 
   const handleToggleWallOrientation = () => {
     const newOrientation = wallOrientation === Orientation.HORIZONTAL ? Orientation.VERTICAL : Orientation.HORIZONTAL;
@@ -60,6 +62,7 @@ const GamePage: React.FC<IGamePageProps> = (
         placeWall={placeWall}
         firstPlayer={firstPlayer}
         secondPlayer={secondPlayer}
+        wallOrientation={wallOrientation}
       />
       <ControlsMenu
         toggleWallOrientation={handleToggleWallOrientation}
@@ -70,11 +73,8 @@ const GamePage: React.FC<IGamePageProps> = (
 };
 
 const mapStateToProps = state => ({
-  // loading: extractLoading(state),
-  // gameStarted: extractGameStarted(state),
-  // board: extractBoard(state),
-  // gameResults: extractGameResults(state),
-  // status: extractStatus(state)
+  firstPlayer: extractFirstPlayer(state),
+  secondPlayer: extractSecondPlayer(state)
 });
 
 const mapDispatchToProps = {

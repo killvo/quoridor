@@ -5,8 +5,30 @@
   cursor: pointer;
   width: 20px;
   height: 20px;
+}
 
+.horizontal_wall {
   &:hover {
-    background-color: $wallPointerHoverDarkColor;
+    &::after {
+      content: "";
+      position: absolute;
+      margin-left: -50px;
+      width: 120px;
+      height: 20px;
+      background-color: $wallColor;
+    }
+  }
+}
+
+.vertical_wall {
+  &:hover {
+    &::after {
+      content: "";
+      position: absolute;
+      margin-top: -50px;
+      width: 20px;
+      height: 120px;
+      background-color: $wallColor;
+    }
   }
 }
