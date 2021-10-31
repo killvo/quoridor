@@ -7,6 +7,7 @@ import com.quebec.core.domains.player.model.FinishLine;
 import com.quebec.core.domains.player.model.Player;
 import com.quebec.core.domains.player.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -15,7 +16,7 @@ import java.util.UUID;
 
 @Service
 public class PlayerService {
-    private PlayerRepository playerRepository;
+    private final PlayerRepository playerRepository;
 
     @Autowired
     public PlayerService(PlayerRepository playerRepository) {
@@ -37,7 +38,11 @@ public class PlayerService {
         if (role == null) {
             throw new IncorrectRoleException("Incorrect Role. NULL value");
         }
-        return playerRepository.createNewPlayer(role, finishLine).orElseThrow();
+        System.out.println("role=" + role.name());
+        var created = playerRepository.createNewPlayer(role, finishLine);
+        //System.out.println("PlayerService. created present? = " + created.isPresent());
+
+        return created.orElseThrow();
     }
 
     public Player updatePlayer(Player player) {

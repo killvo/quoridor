@@ -48,7 +48,7 @@ public class GameService {
             throw new CannotPlaceWallException("Failed to place wall.");
         }
         int wallsLeft = playerService.decreaseWallsCount(player.getId());
-        response.setWallsCount(wallsLeft);
+        response.setWallsAmount(wallsLeft);
         return response;
     }
 

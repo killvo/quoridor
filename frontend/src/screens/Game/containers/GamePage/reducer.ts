@@ -1,35 +1,28 @@
 import { Routine } from 'redux-saga-routines';
 import {
+  placeWallRoutine,
   startTwoPeopleGameRoutine,
-  startWithBotGameRoutine
+  startWithBotGameRoutine,
+  stopGameRoutine
 } from '@screens/Game/routines';
 import { IStartTwoPeopleResponse } from '@screens/Game/model/StartTwoPeopleResponse';
 import { IStartWithBotResponse } from '@screens/Game/model/StartWithBotResponse';
 import { IPlayerWithPosition } from '@screens/Game/model/PlayerWithPosition';
+import { IPlaceWallResponse } from '@screens/Game/model/PlaceWallResponse';
 
 export interface IGameReducerState {
   firstPlayer: IPlayerWithPosition;
   secondPlayer: IPlayerWithPosition;
+  walls: object;
+  lastPlayerId: string;
 }
 
 const initialState: IGameReducerState = {
   firstPlayer: undefined,
-  secondPlayer: undefined
+  secondPlayer: undefined,
+  walls: undefined,
+  lastPlayerId: undefined
 };
-
-// export const gameReducer = createReducer(initialState, {
-//   [startTwoPeopleGameRoutine.SUCCESS]: (state, { payload }: PayloadAction<IStartTwoPeopleResponse>) => {
-//     state.response = payload;
-//   },
-//   [startWithBotGameRoutine.SUCCESS]: (state, { payload }: PayloadAction<IStartWithBotResponse>) => {
-//     state.firstPlayer = payload.firstPlayer;
-//     state.secondPlayer = payload.botPlayer;
-//   },
-//   [stopGameRoutine.SUCCESS]: state => {
-//     state.firstPlayer = undefined;
-//     state.secondPlayer = undefined;
-//   }
-// });
 
 export const gameReducer = (state = initialState, action: Routine<any>) => {
   switch (action.type) {
@@ -63,6 +56,32 @@ export const gameReducer = (state = initialState, action: Routine<any>) => {
           y: 0
         }
       };
+    case stopGameRoutine.SUCCESS:
+      return {
+        ...state,
+        firstPlayer: undefined,
+        secondPlayer: undefined
+      };
+    case placeWallRoutine.SUCCESS:
+      const placeWallResponse = (action.payload as IPlaceWallResponse);
+      const playerThatPlaced = state.firstPlayer.player.id === placeWallResponse.id
+        ? 'firstPlayer'
+        : 'secondPlayer';
+      const updatedPlayer = playerThatPlaced === 'firstPlayer'
+        ? { ...state.firstPlayer.player, availableWallsAmount: placeWallResponse.wallsAmount }
+        : { ...state.secondPlayer.player, availableWallsAmount: placeWallResponse.wallsAmount };
+
+      const updatedState = {
+        ...state,
+        walls: {
+          ...state.walls,
+          [`${placeWallResponse.x}${placeWallResponse.y}`]: placeWallResponse.orientation
+        },
+        lastPlayerId: placeWallResponse.id
+      };
+      updatedState[playerThatPlaced] = { ...state[playerThatPlaced], player: updatedPlayer };
+
+      return updatedState;
     default:
       return state;
   }

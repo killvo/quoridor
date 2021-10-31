@@ -71,7 +71,6 @@ function* tryPlaceWall({ payload }: PayloadAction<IPlaceWallRequest>) {
   try {
     const response = yield call(gameService.placeWall, payload);
     yield put(placeWallRoutine.success(response));
-    toastr.success('Success', 'Wall placed successfully');
   } catch (e) {
     toastr.error('Can\'t place wall', e?.message);
     yield put(placeWallRoutine.failure(e?.message));

@@ -17,6 +17,7 @@ public class GameController {
 
     @PostMapping("place_wall")
     public PlaceWallResponse placeWall(@RequestBody PlaceWallRequest request) {
+        System.out.println(request);
         return gameService.placeWall(request);
     }
 

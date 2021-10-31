@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class GameInitService {
-    private PlayerService playerService;
-    private BoardService boardService;
+    private final PlayerService playerService;
+    private final BoardService boardService;
 
     public GameInitService(PlayerService playerService, BoardService boardService) {
         this.playerService = playerService;
@@ -33,9 +33,8 @@ public class GameInitService {
         return new GameStartWithBotResponse(player1, player2);
     }
 
-    public void resetGame() {
+    public void stopGame() {
         boardService.resetBoard();
-        boardService.resetPlayers();
         playerService.removePlayers();
     }
 }

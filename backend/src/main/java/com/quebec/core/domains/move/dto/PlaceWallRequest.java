@@ -8,7 +8,7 @@ import java.util.UUID;
 @Data
 public class PlaceWallRequest {
     private UUID id;
-    private int xCorner;
-    private int yCorner;
+    private int x;
+    private int y;
     private Orientation orientation;
 }

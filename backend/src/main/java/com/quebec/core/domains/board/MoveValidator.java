@@ -5,6 +5,7 @@ import com.quebec.core.domains.move.dto.PlaceWallRequest;
 import com.quebec.core.domains.move.model.Orientation;
 import com.quebec.core.domains.player.PlayerService;
 import com.quebec.core.domains.player.model.Player;
+import lombok.RequiredArgsConstructor;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
@@ -15,13 +16,14 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 
 @Component
+@RequiredArgsConstructor
 public class MoveValidator {
-    PlayerService playerService;
-    BoardRepository boardRepository;
+    private final PlayerService playerService;
+    private final BoardRepository boardRepository;
 
     public boolean isMoveWallPlaceValid(Graph<String, DefaultEdge> board, Orientation[][] walls, PlaceWallRequest request, Map<UUID, String> playerPositions) {
-        int x = request.getXCorner();
-        int y = request.getYCorner();
+        int x = request.getX();
+        int y = request.getY();
         if (request.getOrientation() == Orientation.VERTICAL) {
             if (x >= 1 && walls[x-1][y] == Orientation.VERTICAL) return false;
             if (x <= 7 && walls[x+1][y] == Orientation.VERTICAL) return false;
@@ -34,11 +36,11 @@ public class MoveValidator {
         boolean flag = false;
         ConnectivityInspector<String, DefaultEdge> inspector = new ConnectivityInspector<>(board);
 
-        boardRepository.placeWall(request.getXCorner(), request.getYCorner(), request.getOrientation());
+        boardRepository.placeWall(request.getX(), request.getY(), request.getOrientation());
         if (canPlayerMoveToFinish(p[0], playerPositions.get(p[0].getId()), inspector) &&
                 canPlayerMoveToFinish(p[1], playerPositions.get(p[1].getId()), inspector)) flag = true;
 
-        boardRepository.removeWall(request.getXCorner(), request.getYCorner());
+        boardRepository.removeWall(request.getX(), request.getY());
         return flag;
     }
 

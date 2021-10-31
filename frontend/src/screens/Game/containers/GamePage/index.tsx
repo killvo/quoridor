@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
-import {connect} from 'react-redux';
-import {IBindingAction, IBindingCallback1} from '@models/Callbacks';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
 import {
   makeMoveRoutine,
   placeWallRoutine,
@@ -10,15 +10,14 @@ import {
   stopGameRoutine
 } from '@screens/Game/routines';
 import MenuPanel from '@screens/Game/components/MenuPanel';
-import {IMakeMoveRequest} from '@screens/Game/model/MakeMoveRequest';
-import {IPlaceWallRequest} from '@screens/Game/model/PlaceWallRequest';
+import { IMakeMoveRequest } from '@screens/Game/model/MakeMoveRequest';
+import { IPlaceWallRequest } from '@screens/Game/model/PlaceWallRequest';
 import Board from '@screens/Game/components/Board';
 import ControlsMenu from '@screens/Game/components/ControlsMenu';
-import {Orientation} from '@screens/Game/model/Orientation';
-import {IPlayer} from '@screens/Game/model/Player';
+import { Orientation } from '@screens/Game/model/Orientation';
+import {extractFirstPlayer, extractLastPlayerId, extractSecondPlayer} from '@screens/Game/reducers';
+import { IPlayerWithPosition } from '@screens/Game/model/PlayerWithPosition';
 import styles from './styles.module.scss';
-import {extractFirstPlayer, extractSecondPlayer} from "@screens/Game/reducers";
-import {IPlayerWithPosition} from "@screens/Game/model/PlayerWithPosition";
 
 export interface IGamePageProps extends IActions, IState {
 }
@@ -35,11 +34,13 @@ interface IActions {
 interface IState {
   firstPlayer: IPlayerWithPosition;
   secondPlayer: IPlayerWithPosition;
+  lastPlayerId: string;
 }
 
 const GamePage: React.FC<IGamePageProps> = (
   {
-    startTwoPeopleGame, startWithBotGame, stopGame, restartGame, makeMove, placeWall, firstPlayer, secondPlayer
+    startTwoPeopleGame, startWithBotGame, stopGame, restartGame,
+    makeMove, placeWall, firstPlayer, secondPlayer, lastPlayerId
   }
 ) => {
   const [wallOrientation, setWallOrientation] = useState<Orientation>(Orientation.HORIZONTAL);
@@ -62,6 +63,7 @@ const GamePage: React.FC<IGamePageProps> = (
         placeWall={placeWall}
         firstPlayer={firstPlayer}
         secondPlayer={secondPlayer}
+        lastPlayerId={lastPlayerId}
         wallOrientation={wallOrientation}
       />
       <ControlsMenu
@@ -74,7 +76,8 @@ const GamePage: React.FC<IGamePageProps> = (
 
 const mapStateToProps = state => ({
   firstPlayer: extractFirstPlayer(state),
-  secondPlayer: extractSecondPlayer(state)
+  secondPlayer: extractSecondPlayer(state),
+  lastPlayerId: extractLastPlayerId(state)
 });
 
 const mapDispatchToProps = {

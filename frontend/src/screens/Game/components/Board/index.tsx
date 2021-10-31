@@ -15,18 +15,20 @@ export interface IBoardProps {
   firstPlayer: IPlayerWithPosition;
   secondPlayer: IPlayerWithPosition;
   wallOrientation: Orientation;
+  lastPlayerId: string;
 }
 
 const Board: React.FC<IBoardProps> = (
   {
-    makeMove, placeWall, firstPlayer, secondPlayer, wallOrientation
+    makeMove, placeWall, firstPlayer, secondPlayer, wallOrientation,
+    lastPlayerId
   }
 ) => {
   const [selectedPlayer, setSelectedPlayer] = useState<IPlayerWithPosition>();
 
   const handlePlaceWall = (request: IPlaceWallRequest) => {
-    if (selectedPlayer) {
-      placeWall({ ...request, playerId: selectedPlayer.player.id });
+    if (selectedPlayer?.player && (selectedPlayer.player.id !== lastPlayerId)) {
+      placeWall({ ...request, id: selectedPlayer.player.id });
     }
   };
 
@@ -39,7 +41,7 @@ const Board: React.FC<IBoardProps> = (
   return (
     <div className={styles.container}>
       <div className={styles.walls_container}>
-        <WallsIndicator availableWallsAmount={secondPlayer?.player.availableWallsAmount} />
+        <WallsIndicator availableWallsAmount={secondPlayer?.player ? secondPlayer.player.availableWallsAmount : 0} />
       </div>
       <div className={styles.game_area}>
         <GameArea
@@ -49,7 +51,7 @@ const Board: React.FC<IBoardProps> = (
         />
       </div>
       <div className={styles.walls_container}>
-        <WallsIndicator availableWallsAmount={firstPlayer?.player.availableWallsAmount} />
+        <WallsIndicator availableWallsAmount={firstPlayer?.player ? firstPlayer.player.availableWallsAmount : 0} />
       </div>
     </div>
   );
