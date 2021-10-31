@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -68,5 +69,9 @@ public class PlayerService {
 
     public void removePlayers() {
         playerRepository.removePlayers();
+    }
+
+    public List<Player> renewPlayers() {
+        return playerRepository.renewPlayers();
     }
 }

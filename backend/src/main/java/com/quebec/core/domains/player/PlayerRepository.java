@@ -87,4 +87,16 @@ public class PlayerRepository {
     public void removePlayers() {
         players.clear();
     }
+
+    public List<Player> renewPlayers() {
+        List<UUID> oldIds = new ArrayList<>(players.keySet());
+        var player1 = getById(oldIds.get(1)).orElseThrow();
+        player1.setAvailableWallsAmount(MAX_WALLS_COUNT);
+        var player2 = getById(oldIds.get(0)).orElseThrow();
+        player2.setAvailableWallsAmount(MAX_WALLS_COUNT);
+        players.clear();
+        players.put(player1.getId(), player1);
+        players.put(player2.getId(), player2);
+        return List.of(player1, player2);
+    }
 }

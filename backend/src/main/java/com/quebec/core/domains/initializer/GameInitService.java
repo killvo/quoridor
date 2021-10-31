@@ -9,6 +9,8 @@ import com.quebec.core.domains.player.model.Player;
 import com.quebec.core.domains.player.model.Role;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class GameInitService {
     private final PlayerService playerService;
@@ -36,5 +38,12 @@ public class GameInitService {
     public void stopGame() {
         boardService.resetBoard();
         playerService.removePlayers();
+    }
+
+    public GameStartWithPlayersResponse restartGame() {
+        boardService.resetBoard();
+        List<Player> players = playerService.renewPlayers();
+        boardService.startGame(players.get(0), players.get(1));
+        return new GameStartWithPlayersResponse(players.get(0), players.get(1));
     }
 }

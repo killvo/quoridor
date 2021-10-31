@@ -1,7 +1,7 @@
 import { Routine } from 'redux-saga-routines';
 import {
   makeMoveRoutine,
-  placeWallRoutine,
+  placeWallRoutine, restartGameRoutine,
   startTwoPeopleGameRoutine,
   startWithBotGameRoutine,
   stopGameRoutine
@@ -68,6 +68,24 @@ export const gameReducer = (state = initialState, action: Routine<any>) => {
         lastPlayerId: undefined,
         walls: undefined,
         winner: undefined
+      };
+    case restartGameRoutine.SUCCESS:
+      const restartPayload = (action.payload as IStartTwoPeopleResponse);
+      return {
+        ...state,
+        lastPlayerId: undefined,
+        walls: undefined,
+        winner: undefined,
+        firstPlayer: {
+          player: restartPayload.firstPlayer,
+          x: 4,
+          y: 8
+        },
+        secondPlayer: {
+          player: restartPayload.secondPlayer,
+          x: 4,
+          y: 0
+        }
       };
     case placeWallRoutine.SUCCESS:
       const placeWallResponse = (action.payload as IPlaceWallResponse);
