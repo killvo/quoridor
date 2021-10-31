@@ -27,8 +27,13 @@ public class GameInitController {
         return gameInitService.startWithBot();
     }
 
-    @PostMapping("reset")
-    public void resetGame() {
-        gameInitService.resetGame();
+    @PostMapping("stop")
+    public void stopGame() {
+        gameInitService.stopGame();
+    }
+
+    @PostMapping("restart")
+    public GameStartWithPlayersResponse restartGame() {
+        return gameInitService.restartGame();
     }
 }

@@ -9,10 +9,12 @@ import com.quebec.core.domains.player.model.Player;
 import com.quebec.core.domains.player.model.Role;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class GameInitService {
-    private PlayerService playerService;
-    private BoardService boardService;
+    private final PlayerService playerService;
+    private final BoardService boardService;
 
     public GameInitService(PlayerService playerService, BoardService boardService) {
         this.playerService = playerService;
@@ -20,22 +22,28 @@ public class GameInitService {
     }
 
     public GameStartWithPlayersResponse startTwoPeople() {
-        Player player1 = playerService.createNewPlayer(Role.PLAYER, FinishLine.BOTTOM);
-        Player player2 = playerService.createNewPlayer(Role.PLAYER, FinishLine.TOP);
+        Player player1 = playerService.createNewPlayer(Role.PLAYER, FinishLine.TOP);
+        Player player2 = playerService.createNewPlayer(Role.PLAYER, FinishLine.BOTTOM);
         boardService.startGame(player1, player2);
         return new GameStartWithPlayersResponse(player1, player2);
     }
 
     public GameStartWithBotResponse startWithBot() {
-        Player player1 = playerService.createNewPlayer(Role.PLAYER, FinishLine.BOTTOM);
-        Player player2 = playerService.createNewPlayer(Role.BOT, FinishLine.TOP);
+        Player player1 = playerService.createNewPlayer(Role.PLAYER, FinishLine.TOP);
+        Player player2 = playerService.createNewPlayer(Role.BOT, FinishLine.BOTTOM);
         boardService.startGame(player1, player2);
         return new GameStartWithBotResponse(player1, player2);
     }
 
-    public void resetGame() {
+    public void stopGame() {
         boardService.resetBoard();
-        boardService.resetPlayers();
         playerService.removePlayers();
+    }
+
+    public GameStartWithPlayersResponse restartGame() {
+        boardService.resetBoard();
+        List<Player> players = playerService.renewPlayers();
+        boardService.startGame(players.get(0), players.get(1));
+        return new GameStartWithPlayersResponse(players.get(0), players.get(1));
     }
 }

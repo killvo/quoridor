@@ -26,24 +26,20 @@ public class BoardService {
 
     public PlaceWallResponse placeWall(PlaceWallRequest request){
         if (validator.isMoveWallPlaceValid(boardRepository.getBoard(), boardRepository.getWalls(), request, boardRepository.getPlayersPositions())){
-            boardRepository.placeWall(request.getXCorner(), request.getYCorner(), request.getOrientation());
+            boardRepository.placeWall(request.getX(), request.getY(), request.getOrientation());
             //TODO: Relocate response creation to GameService
-            return new PlaceWallResponse(request.getId(), 0);
+            return new PlaceWallResponse(request.getId(), request.getX(), request.getY(), request.getOrientation(), 0);
         } else throw new NotPossiblePlaceWallException("It is not possible to place a wall");
     }
 
     public MakeMoveResponse makeMove(MakeMoveRequest request){
-        if (validator.isMovePlayerValid(boardRepository.getBoard(), request, boardRepository.getPlayersPositions())){
-            boardRepository.makeMove(request.getId(), request.getXCorner(), request.getYCorner());
-            return new MakeMoveResponse(request.getId(), request.getXCorner(), request.getYCorner());
+        if (validator.isMovePlayerValid(boardRepository.getBoard(), request, boardRepository.getPlayersPositions())) {
+            boardRepository.makeMove(request.getId(), request.getX(), request.getY());
+            return new MakeMoveResponse(request.getId(), request.getX(), request.getY(), null);
         } else throw new NotPossibleMoveException("This move is not possible");
     }
 
     public void resetBoard() {
         boardRepository.resetBoard();
-    }
-
-    public void resetPlayers() {
-        boardRepository.resetPlayers();
     }
 }

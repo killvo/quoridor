@@ -7,15 +7,17 @@ import com.quebec.core.domains.player.model.FinishLine;
 import com.quebec.core.domains.player.model.Player;
 import com.quebec.core.domains.player.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class PlayerService {
-    private PlayerRepository playerRepository;
+    private final PlayerRepository playerRepository;
 
     @Autowired
     public PlayerService(PlayerRepository playerRepository) {
@@ -67,5 +69,9 @@ public class PlayerService {
 
     public void removePlayers() {
         playerRepository.removePlayers();
+    }
+
+    public List<Player> renewPlayers() {
+        return playerRepository.renewPlayers();
     }
 }

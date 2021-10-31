@@ -10,6 +10,7 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -135,9 +136,7 @@ public class BoardRepository {
 
     public void resetBoard() {
         board = new SimpleGraph<>(DefaultEdge.class);
-    }
-
-    public void resetPlayers() {
         playersPositions = new HashMap<>();
+        walls = new Orientation[8][8];
     }
 }

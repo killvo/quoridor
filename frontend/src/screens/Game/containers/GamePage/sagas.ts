@@ -60,7 +60,6 @@ function* tryMakeMove({ payload }: PayloadAction<IMakeMoveRequest>) {
   try {
     const response = yield call(gameService.makeMove, payload);
     yield put(makeMoveRoutine.success(response));
-    toastr.success('Success', 'Move was successful');
   } catch (e) {
     toastr.error('Can\'t make move', e?.message);
     yield put(makeMoveRoutine.failure(e?.message));
@@ -71,7 +70,6 @@ function* tryPlaceWall({ payload }: PayloadAction<IPlaceWallRequest>) {
   try {
     const response = yield call(gameService.placeWall, payload);
     yield put(placeWallRoutine.success(response));
-    toastr.success('Success', 'Wall placed successfully');
   } catch (e) {
     toastr.error('Can\'t place wall', e?.message);
     yield put(placeWallRoutine.failure(e?.message));

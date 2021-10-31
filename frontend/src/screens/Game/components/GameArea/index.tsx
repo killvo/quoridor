@@ -1,33 +1,43 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Tile from '@screens/Game/components/GameArea/components/Tile';
 import WallPointer from '@screens/Game/components/GameArea/components/WallPointer';
 import { Orientation } from '@screens/Game/model/Orientation';
 import { IBindingCallback1 } from '@models/Callbacks';
 import { IPlaceWallRequest } from '@screens/Game/model/PlaceWallRequest';
-import { IPlayer } from '@screens/Game/model/Player';
+import { IPlayerWithPosition } from '@screens/Game/model/PlayerWithPosition';
 import styles from './styles.module.scss';
-import {IPlayerWithPosition} from "@screens/Game/model/PlayerWithPosition";
+import { extractWalls } from '@screens/Game/reducers';
+import {IMakeMoveRequest} from "@screens/Game/model/MakeMoveRequest";
 
-export interface IGameAreaProps {
+interface IState {
+  walls: object;
+}
+
+export interface IGameAreaProps extends IState{
   wallOrientation: Orientation;
   handlePlaceWall: IBindingCallback1<IPlaceWallRequest>;
   onPlayerSelect: IBindingCallback1<IPlayerWithPosition>;
+  handleMakeMove: IBindingCallback1<IMakeMoveRequest>;
+  selectedPlayer: IPlayerWithPosition;
 }
 
 const GameArea: React.FC<IGameAreaProps> = (
   {
-    wallOrientation, handlePlaceWall, onPlayerSelect
+    wallOrientation, handlePlaceWall, onPlayerSelect, walls, handleMakeMove, selectedPlayer
   }
 ) => {
   const getTiles = () => {
     const tiles = [];
-    for (let x = 0; x < 9; x++) {
-      for (let y = 0; y < 9; y++) {
+    for (let y = 0; y < 9; y++) {
+      for (let x = 0; x < 9; x++) {
         tiles.push(
           <Tile
             onPlayerSelect={onPlayerSelect}
             x={x}
             y={y}
+            handleMakeMove={handleMakeMove}
+            selectedPlayer={selectedPlayer}
           />
         );
       }
@@ -45,6 +55,7 @@ const GameArea: React.FC<IGameAreaProps> = (
             y={y}
             wallOrientation={wallOrientation}
             handlePlaceWall={handlePlaceWall}
+            walls={walls}
           />
         );
       }
@@ -64,4 +75,8 @@ const GameArea: React.FC<IGameAreaProps> = (
   );
 };
 
-export default GameArea;
+const mapStateToProps = state => ({
+  walls: extractWalls(state)
+});
+
+export default connect(mapStateToProps, null)(GameArea);

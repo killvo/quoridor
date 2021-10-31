@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import classNames from 'classnames';
-import { Orientation } from '@screens/Game/model/Orientation';
-import { IBindingCallback1 } from '@models/Callbacks';
-import { IPlaceWallRequest } from '@screens/Game/model/PlaceWallRequest';
+import {Orientation} from '@screens/Game/model/Orientation';
+import {IBindingCallback1} from '@models/Callbacks';
+import {IPlaceWallRequest} from '@screens/Game/model/PlaceWallRequest';
 import styles from './styles.module.scss';
 
 export interface IWallPointerProps {
@@ -10,23 +10,37 @@ export interface IWallPointerProps {
     y: number;
     wallOrientation: Orientation;
     handlePlaceWall: IBindingCallback1<IPlaceWallRequest>;
+    walls: object;
 }
 
 const WallPointer: React.FC<IWallPointerProps> = (
   {
-    x, y, wallOrientation, handlePlaceWall
+    x, y, wallOrientation, handlePlaceWall, walls
   }
 ) => {
-  const [xCorner, setXCorner] = useState<number>(x);
-  const [yCorner, setYCorner] = useState<number>(y);
+  const [placedWall, setPlacedWall] = useState();
+
+  useEffect(
+    () => {
+      const key = `${x}${y}`;
+      if (walls && walls[key]) {
+        setPlacedWall(walls[key]);
+      } else {
+        setPlacedWall(undefined);
+      }
+    },
+    [walls, x, y]
+  );
 
   return (
     <div
       className={classNames(
         styles.wall_pointer,
-        wallOrientation === Orientation.VERTICAL ? styles.vertical_wall : styles.horizontal_wall
+        wallOrientation === Orientation.VERTICAL ? styles.vertical_wall : styles.horizontal_wall,
+        placedWall && (placedWall === 'HORIZONTAL') && styles.placed_horizontal,
+        placedWall && (placedWall === 'VERTICAL') && styles.placed_vertical
       )}
-      onClick={() => handlePlaceWall({ xCorner, yCorner, orientation: wallOrientation, playerId: 'mock-player-id' })}
+      onClick={() => handlePlaceWall({ x, y, orientation: wallOrientation, id: undefined })}
     />
   );
 };
