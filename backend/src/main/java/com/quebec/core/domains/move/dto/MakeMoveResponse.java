@@ -11,6 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class MakeMoveResponse {
     private UUID id;
-    private int xCorner;
-    private int yCorner;
+    private int x;
+    private int y;
+    private String winner;
 }

@@ -20,15 +20,15 @@ public class GameInitService {
     }
 
     public GameStartWithPlayersResponse startTwoPeople() {
-        Player player1 = playerService.createNewPlayer(Role.PLAYER, FinishLine.BOTTOM);
-        Player player2 = playerService.createNewPlayer(Role.PLAYER, FinishLine.TOP);
+        Player player1 = playerService.createNewPlayer(Role.PLAYER, FinishLine.TOP);
+        Player player2 = playerService.createNewPlayer(Role.PLAYER, FinishLine.BOTTOM);
         boardService.startGame(player1, player2);
         return new GameStartWithPlayersResponse(player1, player2);
     }
 
     public GameStartWithBotResponse startWithBot() {
-        Player player1 = playerService.createNewPlayer(Role.PLAYER, FinishLine.BOTTOM);
-        Player player2 = playerService.createNewPlayer(Role.BOT, FinishLine.TOP);
+        Player player1 = playerService.createNewPlayer(Role.PLAYER, FinishLine.TOP);
+        Player player2 = playerService.createNewPlayer(Role.BOT, FinishLine.BOTTOM);
         boardService.startGame(player1, player2);
         return new GameStartWithBotResponse(player1, player2);
     }

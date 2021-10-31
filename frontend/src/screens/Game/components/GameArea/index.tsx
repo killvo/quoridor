@@ -8,6 +8,7 @@ import { IPlaceWallRequest } from '@screens/Game/model/PlaceWallRequest';
 import { IPlayerWithPosition } from '@screens/Game/model/PlayerWithPosition';
 import styles from './styles.module.scss';
 import { extractWalls } from '@screens/Game/reducers';
+import {IMakeMoveRequest} from "@screens/Game/model/MakeMoveRequest";
 
 interface IState {
   walls: object;
@@ -17,11 +18,13 @@ export interface IGameAreaProps extends IState{
   wallOrientation: Orientation;
   handlePlaceWall: IBindingCallback1<IPlaceWallRequest>;
   onPlayerSelect: IBindingCallback1<IPlayerWithPosition>;
+  handleMakeMove: IBindingCallback1<IMakeMoveRequest>;
+  selectedPlayer: IPlayerWithPosition;
 }
 
 const GameArea: React.FC<IGameAreaProps> = (
   {
-    wallOrientation, handlePlaceWall, onPlayerSelect, walls
+    wallOrientation, handlePlaceWall, onPlayerSelect, walls, handleMakeMove, selectedPlayer
   }
 ) => {
   const getTiles = () => {
@@ -33,6 +36,8 @@ const GameArea: React.FC<IGameAreaProps> = (
             onPlayerSelect={onPlayerSelect}
             x={x}
             y={y}
+            handleMakeMove={handleMakeMove}
+            selectedPlayer={selectedPlayer}
           />
         );
       }

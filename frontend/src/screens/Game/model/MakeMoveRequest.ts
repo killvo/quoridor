@@ -1,5 +1,5 @@
 export interface IMakeMoveRequest {
-    playerId: string;
-    xCorner: number;
-    yCorner: number;
+    id: string;
+    x: number;
+    y: number;
 }

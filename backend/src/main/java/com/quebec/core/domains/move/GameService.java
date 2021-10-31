@@ -31,10 +31,15 @@ public class GameService {
     public MakeMoveResponse makeMove(MakeMoveRequest request) {
         Player player = playerService.getPlayer(request.getId());
         MakeMoveResponse response = boardService.makeMove(request);
-        String newPosition = response.getXCorner() + "" + response.getYCorner();
-        // TODO: Decide if this form of finishing is ok
-        if (Arrays.asList(player.getFinishLine()).contains(newPosition)) throw new GameEndedWithWinner("Game over, Winner " + player.getId());
-        return boardService.makeMove(request);
+        String newPosition = response.getX() + "" + response.getY();
+        if (gameFinished(player.getFinishLine(), newPosition)) {
+            response.setWinner(player.getId().toString());
+        }
+        return response;
+    }
+
+    private boolean gameFinished(String[] finishLine, String newPosition) {
+        return Arrays.asList(finishLine).contains(newPosition);
     }
 
 

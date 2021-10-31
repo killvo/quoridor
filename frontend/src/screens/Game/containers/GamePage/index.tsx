@@ -15,9 +15,16 @@ import { IPlaceWallRequest } from '@screens/Game/model/PlaceWallRequest';
 import Board from '@screens/Game/components/Board';
 import ControlsMenu from '@screens/Game/components/ControlsMenu';
 import { Orientation } from '@screens/Game/model/Orientation';
-import {extractFirstPlayer, extractLastPlayerId, extractSecondPlayer} from '@screens/Game/reducers';
+import {
+  extractFirstPlayer,
+  extractLastPlayerId,
+  extractSecondPlayer,
+  extractWalls,
+  extractWinner
+} from '@screens/Game/reducers';
 import { IPlayerWithPosition } from '@screens/Game/model/PlayerWithPosition';
 import styles from './styles.module.scss';
+import WinnerModal from "@screens/Game/components/WinnerModal";
 
 export interface IGamePageProps extends IActions, IState {
 }
@@ -35,12 +42,14 @@ interface IState {
   firstPlayer: IPlayerWithPosition;
   secondPlayer: IPlayerWithPosition;
   lastPlayerId: string;
+  winner: string;
 }
 
 const GamePage: React.FC<IGamePageProps> = (
   {
     startTwoPeopleGame, startWithBotGame, stopGame, restartGame,
-    makeMove, placeWall, firstPlayer, secondPlayer, lastPlayerId
+    makeMove, placeWall, firstPlayer, secondPlayer, lastPlayerId,
+    winner
   }
 ) => {
   const [wallOrientation, setWallOrientation] = useState<Orientation>(Orientation.HORIZONTAL);
@@ -70,6 +79,11 @@ const GamePage: React.FC<IGamePageProps> = (
         toggleWallOrientation={handleToggleWallOrientation}
         wallOrientation={wallOrientation}
       />
+      <WinnerModal
+        winner={winner}
+        onClose={stopGame}
+        onNewSession={startTwoPeopleGame}
+      />
     </div>
   );
 };
@@ -77,7 +91,8 @@ const GamePage: React.FC<IGamePageProps> = (
 const mapStateToProps = state => ({
   firstPlayer: extractFirstPlayer(state),
   secondPlayer: extractSecondPlayer(state),
-  lastPlayerId: extractLastPlayerId(state)
+  lastPlayerId: extractLastPlayerId(state),
+  winner: extractWinner(state)
 });
 
 const mapDispatchToProps = {

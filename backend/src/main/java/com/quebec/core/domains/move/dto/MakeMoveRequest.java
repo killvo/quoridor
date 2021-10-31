@@ -7,6 +7,6 @@ import java.util.UUID;
 @Data
 public class MakeMoveRequest {
     private UUID id;
-    private int xCorner;
-    private int yCorner;
+    private int x;
+    private int y;
 }

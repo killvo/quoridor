@@ -33,9 +33,9 @@ public class BoardService {
     }
 
     public MakeMoveResponse makeMove(MakeMoveRequest request){
-        if (validator.isMovePlayerValid(boardRepository.getBoard(), request, boardRepository.getPlayersPositions())){
-            boardRepository.makeMove(request.getId(), request.getXCorner(), request.getYCorner());
-            return new MakeMoveResponse(request.getId(), request.getXCorner(), request.getYCorner());
+        if (validator.isMovePlayerValid(boardRepository.getBoard(), request, boardRepository.getPlayersPositions())) {
+            boardRepository.makeMove(request.getId(), request.getX(), request.getY());
+            return new MakeMoveResponse(request.getId(), request.getX(), request.getY(), null);
         } else throw new NotPossibleMoveException("This move is not possible");
     }
 

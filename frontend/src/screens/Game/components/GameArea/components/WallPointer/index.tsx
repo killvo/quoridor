@@ -25,6 +25,8 @@ const WallPointer: React.FC<IWallPointerProps> = (
       const key = `${x}${y}`;
       if (walls && walls[key]) {
         setPlacedWall(walls[key]);
+      } else {
+        setPlacedWall(undefined);
       }
     },
     [walls, x, y]

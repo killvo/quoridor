@@ -60,7 +60,6 @@ function* tryMakeMove({ payload }: PayloadAction<IMakeMoveRequest>) {
   try {
     const response = yield call(gameService.makeMove, payload);
     yield put(makeMoveRoutine.success(response));
-    toastr.success('Success', 'Move was successful');
   } catch (e) {
     toastr.error('Can\'t make move', e?.message);
     yield put(makeMoveRoutine.failure(e?.message));

@@ -32,6 +32,12 @@ const Board: React.FC<IBoardProps> = (
     }
   };
 
+  const handleMakeMove = (request: IMakeMoveRequest) => {
+    if (selectedPlayer?.player && (selectedPlayer.player.id !== lastPlayerId)) {
+      makeMove({ ...request, id: selectedPlayer.player.id });
+    }
+  };
+
   const handlePlayerSelect = (player: IPlayerWithPosition) => {
     if (player) {
       setSelectedPlayer(player);
@@ -48,6 +54,8 @@ const Board: React.FC<IBoardProps> = (
           onPlayerSelect={handlePlayerSelect}
           wallOrientation={wallOrientation}
           handlePlaceWall={handlePlaceWall}
+          handleMakeMove={handleMakeMove}
+          selectedPlayer={selectedPlayer}
         />
       </div>
       <div className={styles.walls_container}>

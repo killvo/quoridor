@@ -38,11 +38,7 @@ public class PlayerService {
         if (role == null) {
             throw new IncorrectRoleException("Incorrect Role. NULL value");
         }
-        System.out.println("role=" + role.name());
-        var created = playerRepository.createNewPlayer(role, finishLine);
-        //System.out.println("PlayerService. created present? = " + created.isPresent());
-
-        return created.orElseThrow();
+        return playerRepository.createNewPlayer(role, finishLine).orElseThrow();
     }
 
     public Player updatePlayer(Player player) {
