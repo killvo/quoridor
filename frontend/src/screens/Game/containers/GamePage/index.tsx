@@ -82,7 +82,7 @@ const GamePage: React.FC<IGamePageProps> = (
       <WinnerModal
         winner={winner}
         onClose={stopGame}
-        onNewSession={startTwoPeopleGame}
+        onNewSession={restartGame}
       />
     </div>
   );
