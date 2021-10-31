@@ -43,6 +43,7 @@ dependencies {
     implementation "com.paypal.sdk:checkout-sdk:1.0.2"
     implementation "com.amazonaws:aws-java-sdk-s3:1.11.918"
     implementation "io.sentry:sentry-spring-boot-starter:3.2.0"
+    implementation "org.jgrapht:jgrapht-core:1.5.1"
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'org.postgresql:postgresql'

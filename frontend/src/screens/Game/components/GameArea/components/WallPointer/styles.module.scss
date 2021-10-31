@@ -1,0 +1,57 @@
+@import "src/styles/variables";
+
+.wall_pointer {
+  background-color: $wallPointerDarkColor;
+  border-radius: 3px;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+}
+
+.horizontal_wall {
+  &:hover {
+    &::after {
+      content: "";
+      position: absolute;
+      margin-left: -50px;
+      width: 120px;
+      height: 20px;
+      background-color: $wallColor;
+    }
+  }
+}
+
+.vertical_wall {
+  &:hover {
+    &::after {
+      content: "";
+      position: absolute;
+      margin-top: -50px;
+      width: 20px;
+      height: 120px;
+      background-color: $wallColor;
+    }
+  }
+}
+
+.placed_horizontal {
+  &::after {
+    content: "";
+    position: absolute;
+    margin-left: -50px;
+    width: 120px;
+    height: 20px;
+    background-color: $wallColor;
+  }
+}
+
+.placed_vertical {
+  &::after {
+    content: "";
+    position: absolute;
+    margin-top: -50px;
+    width: 20px;
+    height: 120px;
+    background-color: $wallColor;
+  }
+}

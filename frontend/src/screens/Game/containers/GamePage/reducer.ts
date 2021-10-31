@@ -1,43 +1,128 @@
 import { Routine } from 'redux-saga-routines';
-import { startGameRoutine } from '@screens/Game/routines';
-import { IGameStartResponse } from '@screens/Game/model/GameStartResponse';
+import {
+  makeMoveRoutine,
+  placeWallRoutine, restartGameRoutine,
+  startTwoPeopleGameRoutine,
+  startWithBotGameRoutine,
+  stopGameRoutine
+} from '@screens/Game/routines';
+import { IStartTwoPeopleResponse } from '@screens/Game/model/StartTwoPeopleResponse';
+import { IStartWithBotResponse } from '@screens/Game/model/StartWithBotResponse';
+import { IPlayerWithPosition } from '@screens/Game/model/PlayerWithPosition';
+import { IPlaceWallResponse } from '@screens/Game/model/PlaceWallResponse';
+import { IMakeMoveResponse } from '@screens/Game/model/MakeMoveResponse';
 
 export interface IGameReducerState {
-  loading: boolean;
-  gameStarted: boolean;
-  board: any;
-  results: any;
-  status: string;
+  firstPlayer: IPlayerWithPosition;
+  secondPlayer: IPlayerWithPosition;
+  walls: object;
+  lastPlayerId: string;
+  winner: string;
 }
 
 const initialState: IGameReducerState = {
-  loading: false,
-  gameStarted: false,
-  board: {},
-  results: {},
-  status: ''
+  firstPlayer: undefined,
+  secondPlayer: undefined,
+  walls: undefined,
+  lastPlayerId: undefined,
+  winner: undefined
 };
 
 export const gameReducer = (state = initialState, action: Routine<any>) => {
   switch (action.type) {
-    case startGameRoutine.TRIGGER:
+    case startTwoPeopleGameRoutine.SUCCESS:
+      const payload = (action.payload as IStartTwoPeopleResponse);
       return {
         ...state,
-        loading: true
+        firstPlayer: {
+          player: payload.firstPlayer,
+          x: 4,
+          y: 8
+        },
+        secondPlayer: {
+          player: payload.secondPlayer,
+          x: 4,
+          y: 0
+        }
       };
-    case startGameRoutine.SUCCESS:
-      const payload = (action.payload as IGameStartResponse);
+    case startWithBotGameRoutine.SUCCESS:
+      const payload2 = (action.payload as IStartWithBotResponse);
       return {
         ...state,
-        gameStarted: true,
-        loading: false,
-        status: payload.status
+        firstPlayer: {
+          player: payload2.firstPlayer,
+          x: 4,
+          y: 8
+        },
+        secondPlayer: {
+          player: payload2.botPlayer,
+          x: 4,
+          y: 0
+        }
       };
-    case startGameRoutine.FAILURE:
+    case stopGameRoutine.SUCCESS:
       return {
         ...state,
-        loading: false
+        firstPlayer: undefined,
+        secondPlayer: undefined,
+        lastPlayerId: undefined,
+        walls: undefined,
+        winner: undefined
       };
+    case restartGameRoutine.SUCCESS:
+      const restartPayload = (action.payload as IStartTwoPeopleResponse);
+      return {
+        ...state,
+        lastPlayerId: undefined,
+        walls: undefined,
+        winner: undefined,
+        firstPlayer: {
+          player: restartPayload.firstPlayer,
+          x: 4,
+          y: 8
+        },
+        secondPlayer: {
+          player: restartPayload.secondPlayer,
+          x: 4,
+          y: 0
+        }
+      };
+    case placeWallRoutine.SUCCESS:
+      const placeWallResponse = (action.payload as IPlaceWallResponse);
+      const playerThatPlaced = state.firstPlayer.player.id === placeWallResponse.id
+        ? 'firstPlayer'
+        : 'secondPlayer';
+      const updatedPlayer = playerThatPlaced === 'firstPlayer'
+        ? { ...state.firstPlayer.player, availableWallsAmount: placeWallResponse.wallsAmount }
+        : { ...state.secondPlayer.player, availableWallsAmount: placeWallResponse.wallsAmount };
+      const updatedState = {
+        ...state,
+        walls: {
+          ...state.walls,
+          [`${placeWallResponse.x}${placeWallResponse.y}`]: placeWallResponse.orientation
+        },
+        lastPlayerId: placeWallResponse.id
+      };
+      updatedState[playerThatPlaced] = { ...state[playerThatPlaced], player: updatedPlayer };
+
+      return updatedState;
+    case makeMoveRoutine.SUCCESS:
+      const makeMoveResponse = (action.payload as IMakeMoveResponse);
+      const playerThatMoved = state.firstPlayer.player.id === makeMoveResponse.id
+        ? 'firstPlayer'
+        : 'secondPlayer';
+      const updatedStateWithMoved = {
+        ...state,
+        lastPlayerId: makeMoveResponse.id,
+        winner: makeMoveResponse.winner
+      };
+      updatedStateWithMoved[playerThatMoved] = {
+        ...state[playerThatMoved],
+        x: makeMoveResponse.x,
+        y: makeMoveResponse.y
+      };
+
+      return updatedStateWithMoved;
     default:
       return state;
   }

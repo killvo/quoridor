@@ -1,70 +1,107 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { Button } from 'semantic-ui-react';
-import { IBindingCallback1 } from '@models/Callbacks';
+import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
 import {
-  extractBoard,
-  extractGameResults,
-  extractGameStarted,
-  extractLoading, extractStatus
+  makeMoveRoutine,
+  placeWallRoutine,
+  restartGameRoutine,
+  startTwoPeopleGameRoutine,
+  startWithBotGameRoutine,
+  stopGameRoutine
+} from '@screens/Game/routines';
+import MenuPanel from '@screens/Game/components/MenuPanel';
+import { IMakeMoveRequest } from '@screens/Game/model/MakeMoveRequest';
+import { IPlaceWallRequest } from '@screens/Game/model/PlaceWallRequest';
+import Board from '@screens/Game/components/Board';
+import ControlsMenu from '@screens/Game/components/ControlsMenu';
+import { Orientation } from '@screens/Game/model/Orientation';
+import {
+  extractFirstPlayer,
+  extractLastPlayerId,
+  extractSecondPlayer,
+  extractWalls,
+  extractWinner
 } from '@screens/Game/reducers';
-import { startGameRoutine } from '@screens/Game/routines';
-import { IGameStartRequest } from '@screens/Game/model/GameStartRequest';
+import { IPlayerWithPosition } from '@screens/Game/model/PlayerWithPosition';
 import styles from './styles.module.scss';
+import WinnerModal from "@screens/Game/components/WinnerModal";
 
-export interface IGamePageProps {
-  loading: boolean;
-  gameStarted: boolean;
-  board: any;
-  gameResults: any;
-  startGame: IBindingCallback1<IGameStartRequest>;
-  status: string;
+export interface IGamePageProps extends IActions, IState {
+}
+
+interface IActions {
+  startTwoPeopleGame: IBindingAction;
+  startWithBotGame: IBindingAction;
+  stopGame: IBindingAction;
+  restartGame: IBindingAction;
+  makeMove: IBindingCallback1<IMakeMoveRequest>;
+  placeWall: IBindingCallback1<IPlaceWallRequest>;
+}
+
+interface IState {
+  firstPlayer: IPlayerWithPosition;
+  secondPlayer: IPlayerWithPosition;
+  lastPlayerId: string;
+  winner: string;
 }
 
 const GamePage: React.FC<IGamePageProps> = (
   {
-    loading, gameStarted, board, gameResults, startGame, status
+    startTwoPeopleGame, startWithBotGame, stopGame, restartGame,
+    makeMove, placeWall, firstPlayer, secondPlayer, lastPlayerId,
+    winner
   }
 ) => {
-  const handleGameStart = () => {
-    startGame({
-      firstPlayerName: 'testPlayer1',
-      secondPlayerName: 'testPlayer2'
-    });
+  const [wallOrientation, setWallOrientation] = useState<Orientation>(Orientation.HORIZONTAL);
+
+  const handleToggleWallOrientation = () => {
+    const newOrientation = wallOrientation === Orientation.HORIZONTAL ? Orientation.VERTICAL : Orientation.HORIZONTAL;
+    setWallOrientation(newOrientation);
   };
 
   return (
     <div className={`${styles.container} content_wrapper`}>
-      <div>
-        Game loading:
-        { loading ? 'true' : 'false' }
-      </div>
-      <div>
-        Game started:
-        { gameStarted ? 'true' : 'false' }
-      </div>
-      <div className={styles.status}>
-        Game status:
-        {'\n'}
-        { status }
-      </div>
-      <div>
-        <Button onClick={handleGameStart}>Start Game</Button>
-      </div>
+      <MenuPanel
+        startTwoPeopleGame={startTwoPeopleGame}
+        startWithBotGame={startWithBotGame}
+        stopGame={stopGame}
+        restartGame={restartGame}
+      />
+      <Board
+        makeMove={makeMove}
+        placeWall={placeWall}
+        firstPlayer={firstPlayer}
+        secondPlayer={secondPlayer}
+        lastPlayerId={lastPlayerId}
+        wallOrientation={wallOrientation}
+      />
+      <ControlsMenu
+        toggleWallOrientation={handleToggleWallOrientation}
+        wallOrientation={wallOrientation}
+      />
+      <WinnerModal
+        winner={winner}
+        onClose={stopGame}
+        onNewSession={restartGame}
+      />
     </div>
   );
 };
 
 const mapStateToProps = state => ({
-  loading: extractLoading(state),
-  gameStarted: extractGameStarted(state),
-  board: extractBoard(state),
-  gameResults: extractGameResults(state),
-  status: extractStatus(state)
+  firstPlayer: extractFirstPlayer(state),
+  secondPlayer: extractSecondPlayer(state),
+  lastPlayerId: extractLastPlayerId(state),
+  winner: extractWinner(state)
 });
 
 const mapDispatchToProps = {
-  startGame: startGameRoutine.trigger
+  startTwoPeopleGame: startTwoPeopleGameRoutine.trigger,
+  startWithBotGame: startWithBotGameRoutine.trigger,
+  stopGame: stopGameRoutine.trigger,
+  restartGame: restartGameRoutine.trigger,
+  makeMove: makeMoveRoutine.trigger,
+  placeWall: placeWallRoutine.trigger
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GamePage);

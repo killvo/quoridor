@@ -1,8 +1,7 @@
 @import "src/styles/variables";
 
 .container {
-
-  .status {
-    white-space: pre-wrap;
-  }
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
 }

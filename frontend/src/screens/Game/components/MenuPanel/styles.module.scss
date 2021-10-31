@@ -1,0 +1,18 @@
+@import "src/styles/variables";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 20px 20px;
+  height: 100%;
+  width: 200px;
+  background-color: $uiLightBlue;
+  border-radius: 5px;
+  align-items: start;
+
+  button {
+    height: 33px !important;
+    text-align: start !important;
+  }
+}
