@@ -109,11 +109,11 @@ public class BoardRepository {
         checkBoardOnValid();
         walls[x][y] = orientation;
         if (orientation == Orientation.VERTICAL) {
-            board.removeEdge(getName(x, y), getName(x + 1, y));
-            board.removeEdge(getName(x, y + 1), getName(x + 1, y + 1));
+            board.removeEdge(getName(y, x), getName(y + 1, x));
+            board.removeEdge(getName(y, x + 1), getName(y + 1, x + 1));
         } else {
-            board.removeEdge(getName(x, y), getName(x, y + 1));
-            board.removeEdge(getName(x + 1, y), getName(x + 1, y + 1));
+            board.removeEdge(getName(y, x), getName(y, x + 1));
+            board.removeEdge(getName(y + 1, x), getName(y + 1, x + 1));
         }
         return getName(x, y);
     }
