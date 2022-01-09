@@ -1,5 +1,7 @@
 package com.quebec.core.cli;
 
+import com.quebec.core.cli.model.Command;
+import com.quebec.core.cli.model.PlayerColor;
 import com.quebec.core.domains.initializer.GameInitService;
 import com.quebec.core.domains.move.GameService;
 import lombok.RequiredArgsConstructor;
@@ -40,13 +42,13 @@ public class CommandLineHandler implements CommandLineRunner {
             }
 
             String[] commandParts = commandName.split(" ");
-            CommandsEnum command = CommandsEnum.valueOf(commandParts[0].toUpperCase(Locale.ROOT));
+            Command command = Command.valueOf(commandParts[0].toUpperCase(Locale.ROOT));
             switch (command) {
                 case BLACK:
-                    handlePlayerSetColor(PlayerColor.BLACK);
+                    handleColorCommand(PlayerColor.BLACK);
                     break;
                 case WHITE:
-                    handlePlayerSetColor(PlayerColor.WHITE);
+                    handleColorCommand(PlayerColor.WHITE);
                     break;
                 case MOVE:
                     break;
@@ -75,12 +77,27 @@ public class CommandLineHandler implements CommandLineRunner {
         SpringApplication.exit(appContext, () -> returnCode);
     }
 
-    private void handlePlayerSetColor(PlayerColor playerColor) {
+    private void handleColorCommand(PlayerColor playerColor) {
         // TODO: invocate method that set our bot player color: gameInitService.setPlayerColor();
 
         if (playerColor.equals(PlayerColor.WHITE)) {
             // TODO: invocate method that make bot move: gameService.getBotPlayerMove();
             out("Bot move");
+        }
+    }
+
+    private void handleMoveCommand(String[] commandParts) {
+        validateCommand(commandParts);
+        String position = commandParts[1];
+        String[] positionArray = position.split("");
+        String xLetter = positionArray[0];
+        int y = Integer.parseInt(positionArray[1]);
+    }
+
+    private void validateCommand(String[] commandParts) {
+        int length = commandParts.length;
+        if (length != 2) {
+            out("Incorrect command");
         }
     }
 }
