@@ -2,7 +2,8 @@ package com.quebec.core.cli;
 
 import com.quebec.core.cli.model.Command;
 import com.quebec.core.cli.model.PlayerColor;
-import com.quebec.core.cli.model.XLetter;
+import com.quebec.core.cli.model.XTileLetter;
+import com.quebec.core.cli.model.XWallLetter;
 import com.quebec.core.domains.initializer.GameInitService;
 import com.quebec.core.domains.move.GameService;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +53,7 @@ public class CommandLineHandler implements CommandLineRunner {
                     handleColorCommand(PlayerColor.WHITE);
                     break;
                 case MOVE:
+                    handleMoveCommand(commandParts);
                     break;
                 case JUMP:
                     break;
@@ -79,10 +81,10 @@ public class CommandLineHandler implements CommandLineRunner {
     }
 
     private void handleColorCommand(PlayerColor playerColor) {
-        // TODO: invocate method that set our bot player color: gameInitService.setPlayerColor();
+        // TODO: gameInitService.setPlayerColor();
 
         if (playerColor.equals(PlayerColor.WHITE)) {
-            // TODO: invocate method that make bot move: gameService.getBotPlayerMove();
+            // TODO: Move move = gameService.getBotPlayerMove();
             out("Bot move");
         }
     }
@@ -91,8 +93,12 @@ public class CommandLineHandler implements CommandLineRunner {
         validateCommand(commandParts);
         String position = commandParts[1];
         String[] positionArray = position.split("");
-        int x = xPositionFromLetter(positionArray[0]);
+        String xLetter = positionArray[0];
+        int x = xTilePositionFromLetter(xLetter);
         int y = Integer.parseInt(positionArray[1]);
+        // TODO: enemy player move: gameService.makeMove(x, y);
+        String botResponse = getBotResponse();
+        out(botResponse);
     }
 
     private void validateCommand(String[] commandParts) {
@@ -102,15 +108,37 @@ public class CommandLineHandler implements CommandLineRunner {
         }
     }
 
-    private int xPositionFromLetter(String letter) {
-        return XLetter.valueOf(letter).getX();
+    private String getBotResponse() {
+        // TODO: our bot player response: Move move = gameService.getBotPlayerMove();
+        // Orientation orientation = move.getOrientation();
+        // String xResponse = orientation == null ? tileLetterFromX(move.getX()) : wallLetterFromX(move.getX());
+        // int yResponse = move.getY();
+        // String response = move.getType().toString() + " " + xResponse + yResponse;
+        // if (orientation != null) response += "orientation.getLetter()";
+        return "response";
     }
 
-    private String letterFromX(int x) {
-        XLetter xLetter = XLetter.xLetterByX(x);
-        if (xLetter == null) {
+    private int xTilePositionFromLetter(String letter) {
+        return XTileLetter.valueOf(letter).getX();
+    }
+
+    private int xWallPositionFromLetter(String letter) {
+        return XWallLetter.valueOf(letter).getX();
+    }
+
+    private String tileLetterFromX(int x) {
+        XTileLetter xTileLetter = XTileLetter.xLetterByX(x);
+        if (xTileLetter == null) {
             throw new RuntimeException("There are no letter for this position");
         }
-        return xLetter.toString();
+        return xTileLetter.toString();
+    }
+
+    private String wallLetterFromX(int x) {
+        XWallLetter xWallLetter = XWallLetter.xLetterByX(x);
+        if (xWallLetter == null) {
+            throw new RuntimeException("There are no letter for this position");
+        }
+        return xWallLetter.toString();
     }
 }

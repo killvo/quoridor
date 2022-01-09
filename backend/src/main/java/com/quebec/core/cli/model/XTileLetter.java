@@ -1,6 +1,6 @@
 package com.quebec.core.cli.model;
 
-public enum XLetter {
+public enum XTileLetter {
     A(0),
     B(1),
     C(2),
@@ -13,7 +13,7 @@ public enum XLetter {
 
     private final int x;
 
-    XLetter(int x) {
+    XTileLetter(int x) {
         this.x = x;
     }
 
@@ -21,10 +21,10 @@ public enum XLetter {
         return x;
     }
 
-    public static XLetter xLetterByX(int x) {
-        for (XLetter xLetter : values()) {
-            if (xLetter.getX() == x) {
-                return xLetter;
+    public static XTileLetter xLetterByX(int x) {
+        for (XTileLetter xTileLetter : values()) {
+            if (xTileLetter.getX() == x) {
+                return xTileLetter;
             }
         }
         return null;
