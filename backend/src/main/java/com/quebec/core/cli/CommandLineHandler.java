@@ -2,6 +2,7 @@ package com.quebec.core.cli;
 
 import com.quebec.core.cli.model.Command;
 import com.quebec.core.cli.model.PlayerColor;
+import com.quebec.core.cli.model.XLetter;
 import com.quebec.core.domains.initializer.GameInitService;
 import com.quebec.core.domains.move.GameService;
 import lombok.RequiredArgsConstructor;
@@ -90,7 +91,7 @@ public class CommandLineHandler implements CommandLineRunner {
         validateCommand(commandParts);
         String position = commandParts[1];
         String[] positionArray = position.split("");
-        String xLetter = positionArray[0];
+        int x = xPositionFromLetter(positionArray[0]);
         int y = Integer.parseInt(positionArray[1]);
     }
 
@@ -99,5 +100,17 @@ public class CommandLineHandler implements CommandLineRunner {
         if (length != 2) {
             out("Incorrect command");
         }
+    }
+
+    private int xPositionFromLetter(String letter) {
+        return XLetter.valueOf(letter).getX();
+    }
+
+    private String letterFromX(int x) {
+        XLetter xLetter = XLetter.xLetterByX(x);
+        if (xLetter == null) {
+            throw new RuntimeException("There are no letter for this position");
+        }
+        return xLetter.toString();
     }
 }
