@@ -27,6 +27,8 @@ public class CommandLineHandler implements CommandLineRunner {
 
     чорний гравець знаходиться зверху (клітинка E1), а білий - знизу (E9)
 
+    ! не забувати що у консоль виводимо координати 1..9, а на дошці використовуємо 0..8
+
      */
 
 
@@ -40,7 +42,6 @@ public class CommandLineHandler implements CommandLineRunner {
             if (commandName.equals("stop")) {
                 isStop = true;
                 stopCommandReader();
-                return;
             }
 
             String[] commandParts = commandName.split(" ");
@@ -56,8 +57,10 @@ public class CommandLineHandler implements CommandLineRunner {
                     handleMoveCommand(commandParts);
                     break;
                 case JUMP:
+                    handleJumpCommand(commandParts);
                     break;
                 case WALL:
+                    handleWallCommand(commandParts);
                     break;
                 default:
                     out("Command not found");
@@ -97,6 +100,31 @@ public class CommandLineHandler implements CommandLineRunner {
         int x = xTilePositionFromLetter(xLetter);
         int y = Integer.parseInt(positionArray[1]);
         // TODO: enemy player move: gameService.makeMove(x, y);
+        String botResponse = getBotResponse();
+        out(botResponse);
+    }
+
+    private void handleJumpCommand(String[] commandParts) {
+        validateCommand(commandParts);
+        String position = commandParts[1];
+        String[] positionArray = position.split("");
+        String xLetter = positionArray[0];
+        int x = xTilePositionFromLetter(xLetter);
+        int y = Integer.parseInt(positionArray[1]);
+        // TODO: enemy player move: gameService.makeJump(x, y);
+        String botResponse = getBotResponse();
+        out(botResponse);
+    }
+
+    private void handleWallCommand(String[] commandParts) {
+        validateCommand(commandParts);
+        String position = commandParts[1];
+        String[] positionArray = position.split("");
+        String xLetter = positionArray[0];
+        int x = xTilePositionFromLetter(xLetter);
+        int y = Integer.parseInt(positionArray[1]);
+        String orientation = positionArray[2];
+        // TODO: enemy player move: gameService.placeWall(x, y, orientation);
         String botResponse = getBotResponse();
         out(botResponse);
     }
