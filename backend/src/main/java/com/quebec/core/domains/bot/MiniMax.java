@@ -4,31 +4,30 @@ import com.quebec.core.domains.board.BoardService;
 import com.quebec.core.domains.move.Move;
 import com.quebec.core.domains.move.MovePlayerMove;
 import com.quebec.core.domains.move.PlaceWallMove;
+import com.quebec.core.domains.player.model.Player;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.AbstractBaseGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Component
 public class MiniMax {
     public BoardStateTree tree;
     public BoardService boardService;
+    public Evaluator evaluator;
 
-    public void constructTree(Graph<String, DefaultEdge> board, Map<UUID, String> playerPositions) {
+    public void constructTree(Graph<String, DefaultEdge> board, Player player) {
         tree = new BoardStateTree();
         Node root = new Node();
         root.setBoard(board);
         tree.setRoot(root);
-        constructTree(root, 0);
+        constructTree(root, player, 0);
     }
 
-    private void constructTree(Node parentNode, int counter) {
+    private void constructTree(Node parentNode, Player player, int counter) {
         List<MovePlayerMove> listOfPossibleMovePlayerMoves = boardService.getAllPossibleMakeMoves(parentNode.getBoard(), ((MovePlayerMove) parentNode.getMoveThatLeadToIt()).toRequest(), parentNode.getPlayerPositions());
         List<PlaceWallMove> listOfPossiblePlaceWallMoves = boardService.getAllPossiblePlaceWalls(parentNode.getBoard(), parentNode.getWalls(), ((PlaceWallMove) parentNode.getMoveThatLeadToIt()).toRequest(), parentNode.getPlayerPositions());
 
@@ -46,11 +45,10 @@ public class MiniMax {
             }
             newNode.setWalls(parentNode.getWalls());
             newNode.setPlayerPositions(parentNode.playerPositions);
-            // TODO Create an evaluation function and result put in next line
-            newNode.setScore(0);
+            newNode.setScore(evaluator.evaluate(newNode, player));
             parentNode.addChild(newNode);
             if (counter < 2) {
-                constructTree(newNode, counter+1);
+                constructTree(newNode, player, counter+1);
             }
         });
     }
