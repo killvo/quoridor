@@ -6,11 +6,11 @@ import com.quebec.core.domains.move.model.Orientation;
 import com.quebec.core.domains.player.model.FinishLine;
 import com.quebec.core.domains.player.model.Player;
 import org.jgrapht.Graph;
+import org.jgrapht.graph.AbstractBaseGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -59,7 +59,7 @@ public class BoardRepository {
         }
     }
 
-    private String getName(int x, int y) {
+    private String getName(int y , int x) {
         return x + "" + y;
     }
 
@@ -118,6 +118,18 @@ public class BoardRepository {
         return getName(x, y);
     }
 
+    public SimpleGraph placeWallImmutable(int x, int y, Orientation orientation){
+        SimpleGraph<String, DefaultEdge> clonedBoard = (SimpleGraph) ((AbstractBaseGraph) board).clone();
+        if (orientation == Orientation.VERTICAL) {
+            clonedBoard.removeEdge(getName(y, x), getName(y + 1, x));
+            clonedBoard.removeEdge(getName(y, x + 1), getName(y + 1, x + 1));
+        } else {
+            clonedBoard.removeEdge(getName(y, x), getName(y, x + 1));
+            clonedBoard.removeEdge(getName(y + 1, x), getName(y + 1, x + 1));
+        }
+        return clonedBoard;
+    }
+
     public void removeWall(int x, int y) {
         checkBoardOnValid();
         if(walls[x][y] != null){
@@ -132,7 +144,6 @@ public class BoardRepository {
             walls[x][y] = null;
         }
     }
-
 
     public void resetBoard() {
         board = new SimpleGraph<>(DefaultEdge.class);
