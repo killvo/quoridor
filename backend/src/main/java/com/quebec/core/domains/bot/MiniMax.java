@@ -28,8 +28,17 @@ public class MiniMax {
     }
 
     private void constructTree(Node parentNode, Player player, int counter) {
-        List<MovePlayerMove> listOfPossibleMovePlayerMoves = boardService.getAllPossibleMakeMoves(parentNode.getBoard(), ((MovePlayerMove) parentNode.getMoveThatLeadToIt()).toRequest(), parentNode.getPlayerPositions());
-        List<PlaceWallMove> listOfPossiblePlaceWallMoves = boardService.getAllPossiblePlaceWalls(parentNode.getBoard(), parentNode.getWalls(), ((PlaceWallMove) parentNode.getMoveThatLeadToIt()).toRequest(), parentNode.getPlayerPositions());
+        List<MovePlayerMove> listOfPossibleMovePlayerMoves = boardService.getAllPossibleMakeMoves(
+                parentNode.getBoard(),
+                ((MovePlayerMove) parentNode.getMoveThatLeadToIt()).toRequest(player.getId()),
+                parentNode.getPlayerPositions()
+        );
+        List<PlaceWallMove> listOfPossiblePlaceWallMoves = boardService.getAllPossiblePlaceWalls(
+                parentNode.getBoard(),
+                parentNode.getWalls(),
+                ((PlaceWallMove) parentNode.getMoveThatLeadToIt()).toRequest(player.getId()),
+                parentNode.getPlayerPositions()
+        );
 
         List<Move> list = new ArrayList<>();
         list.addAll(listOfPossibleMovePlayerMoves);
