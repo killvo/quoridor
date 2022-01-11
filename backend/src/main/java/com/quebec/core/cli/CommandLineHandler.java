@@ -4,8 +4,13 @@ import com.quebec.core.cli.model.Command;
 import com.quebec.core.cli.model.PlayerColor;
 import com.quebec.core.cli.model.XTileLetter;
 import com.quebec.core.cli.model.XWallLetter;
+import com.quebec.core.domains.bot.dto.BotResponse;
 import com.quebec.core.domains.initializer.GameInitService;
 import com.quebec.core.domains.move.GameService;
+import com.quebec.core.domains.move.Move;
+import com.quebec.core.domains.move.MovePlayerMove;
+import com.quebec.core.domains.move.PlaceWallMove;
+import com.quebec.core.domains.move.model.Orientation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -26,6 +31,8 @@ public class CommandLineHandler implements CommandLineRunner {
     /*
 
     чорний гравець знаходиться зверху (клітинка E1), а білий - знизу (E9)
+    player1 - up
+    player2 - bottom
 
     ! не забувати що у консоль виводимо координати 1..9, а на дошці використовуємо 0..8
 
@@ -84,11 +91,22 @@ public class CommandLineHandler implements CommandLineRunner {
     }
 
     private void handleColorCommand(PlayerColor playerColor) {
-        // TODO: gameInitService.setPlayerColor();
+        gameInitService.startGameAndSetBotPlayerColor(playerColor);
 
         if (playerColor.equals(PlayerColor.WHITE)) {
-            // TODO: Move move = gameService.getBotPlayerMove();
-            out("Bot move");
+            BotResponse botResponse = gameService.getBotMove();
+            String responseLine;
+            if (botResponse.getOrientation() == Orientation.NONE) {
+                String x = tileLetterFromX(convertCoordinateToResponse(botResponse.getXCorner()));
+                int y = convertCoordinateToResponse(botResponse.getYCorner());
+                responseLine = "move " + x + y;
+            } else {
+                String x = wallLetterFromX(convertCoordinateToResponse(botResponse.getXCorner()));
+                int y = convertCoordinateToResponse(botResponse.getYCorner());
+                String orientationLetter = botResponse.getOrientation() == Orientation.HORIZONTAL ? "h" : "v";
+                responseLine = "wall " + x + y + orientationLetter;
+            }
+            out(responseLine);
         }
     }
 
@@ -99,7 +117,8 @@ public class CommandLineHandler implements CommandLineRunner {
         String xLetter = positionArray[0];
         int x = xTilePositionFromLetter(xLetter);
         int y = Integer.parseInt(positionArray[1]);
-        // TODO: enemy player move: gameService.makeMove(x, y);
+        var moveRequest = new MovePlayerMove(x, y).toRequest();
+        gameService.makeMove(moveRequest);
         String botResponse = getBotResponse();
         out(botResponse);
     }
@@ -121,10 +140,12 @@ public class CommandLineHandler implements CommandLineRunner {
         String position = commandParts[1];
         String[] positionArray = position.split("");
         String xLetter = positionArray[0];
-        int x = xTilePositionFromLetter(xLetter);
+        int x = xWallPositionFromLetter(xLetter);
         int y = Integer.parseInt(positionArray[1]);
-        String orientation = positionArray[2];
-        // TODO: enemy player move: gameService.placeWall(x, y, orientation);
+        String orientationString = positionArray[2];
+        Orientation orientation = orientationString.equals("v") ? Orientation.VERTICAL : Orientation.HORIZONTAL;
+        var placeWallRequest = new PlaceWallMove(x, y, orientation).toRequest();
+        gameService.placeWall(placeWallRequest);
         String botResponse = getBotResponse();
         out(botResponse);
     }
@@ -168,5 +189,9 @@ public class CommandLineHandler implements CommandLineRunner {
             throw new RuntimeException("There are no letter for this position");
         }
         return xWallLetter.toString();
+    }
+
+    private int convertCoordinateToResponse(int coordinate) {
+        return coordinate + 1;
     }
 }

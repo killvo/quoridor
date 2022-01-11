@@ -1,5 +1,6 @@
 package com.quebec.core.domains.initializer;
 
+import com.quebec.core.cli.model.PlayerColor;
 import com.quebec.core.domains.board.BoardService;
 import com.quebec.core.domains.initializer.dto.GameStartWithBotResponse;
 import com.quebec.core.domains.initializer.dto.GameStartWithPlayersResponse;
@@ -31,6 +32,25 @@ public class GameInitService {
     public GameStartWithBotResponse startWithBot() {
         Player player1 = playerService.createNewPlayer(Role.PLAYER, FinishLine.TOP);
         Player player2 = playerService.createNewPlayer(Role.BOT, FinishLine.BOTTOM);
+        boardService.startGame(player1, player2);
+        return new GameStartWithBotResponse(player1, player2);
+    }
+
+    /**
+     * player1 - нижній гравець (4, 8)
+     * player2 - верхній гравець (4, 0)
+     */
+    public GameStartWithBotResponse startGameAndSetBotPlayerColor(PlayerColor botColor) {
+        Player player1;
+        Player player2;
+        if (botColor == PlayerColor.BLACK) {
+            player2 = playerService.createNewPlayer(Role.BOT, FinishLine.BOTTOM);
+            player1 = playerService.createNewPlayer(Role.PLAYER, FinishLine.TOP);
+        } else {
+            player2 = playerService.createNewPlayer(Role.BOT, FinishLine.TOP);
+            player1 = playerService.createNewPlayer(Role.PLAYER, FinishLine.BOTTOM);
+        }
+
         boardService.startGame(player1, player2);
         return new GameStartWithBotResponse(player1, player2);
     }
