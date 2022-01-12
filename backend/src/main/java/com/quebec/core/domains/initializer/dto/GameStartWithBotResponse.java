@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class GameStartWithBotResponse {
-    private Player firstPlayer;
+    private Player enemyPlayer;
     private Player botPlayer;
 }

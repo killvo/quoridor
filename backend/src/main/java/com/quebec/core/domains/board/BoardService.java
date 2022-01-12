@@ -39,7 +39,6 @@ public class BoardService {
     public PlaceWallResponse placeWall(PlaceWallRequest request){
         if (validator.isMoveWallPlaceValid(boardRepository.getBoard(), boardRepository.getWalls(), request, boardRepository.getPlayersPositions())){
             boardRepository.placeWall(request.getX(), request.getY(), request.getOrientation());
-            //TODO: Relocate response creation to GameService
             return new PlaceWallResponse(request.getId(), request.getX(), request.getY(), request.getOrientation(), 0);
         } else throw new NotPossiblePlaceWallException("It is not possible to place a wall");
     }

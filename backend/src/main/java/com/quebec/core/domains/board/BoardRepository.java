@@ -59,7 +59,7 @@ public class BoardRepository {
         }
     }
 
-    private String getName(int y , int x) {
+    private String getName(int x , int y) {
         return x + "" + y;
     }
 

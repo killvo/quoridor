@@ -38,6 +38,16 @@ public class GameService {
         return response;
     }
 
+    public MakeMoveResponse makeJump(MakeMoveRequest request) {
+//        Player player = playerService.getPlayer(request.getId());
+//        MakeMoveResponse response = boardService.makeMove(request);
+//        String newPosition = response.getX() + "" + response.getY();
+//        if (gameFinished(player.getFinishLine(), newPosition)) {
+//            response.setWinner(player.getId().toString());
+//        }
+        return null;
+    }
+
     private boolean gameFinished(String[] finishLine, String newPosition) {
         return Arrays.asList(finishLine).contains(newPosition);
     }
