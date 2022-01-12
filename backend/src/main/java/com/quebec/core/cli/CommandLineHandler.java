@@ -6,11 +6,12 @@ import com.quebec.core.cli.model.XTileLetter;
 import com.quebec.core.cli.model.XWallLetter;
 import com.quebec.core.domains.bot.dto.BotResponse;
 import com.quebec.core.domains.initializer.GameInitService;
+import com.quebec.core.domains.initializer.dto.GameStartWithBotResponse;
 import com.quebec.core.domains.move.GameService;
-import com.quebec.core.domains.move.Move;
 import com.quebec.core.domains.move.MovePlayerMove;
 import com.quebec.core.domains.move.PlaceWallMove;
 import com.quebec.core.domains.move.model.Orientation;
+import com.quebec.core.domains.player.model.Player;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Locale;
 import java.util.Scanner;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -27,6 +29,9 @@ public class CommandLineHandler implements CommandLineRunner {
     private final ApplicationContext appContext;
     private final GameInitService gameInitService;
     private final GameService gameService;
+
+    private Player botPlayer;
+    private Player enemyPlayer;
 
     /*
 
@@ -91,7 +96,9 @@ public class CommandLineHandler implements CommandLineRunner {
     }
 
     private void handleColorCommand(PlayerColor playerColor) {
-        gameInitService.startGameAndSetBotPlayerColor(playerColor);
+        GameStartWithBotResponse response = gameInitService.startGameAndSetBotPlayerColor(playerColor);
+        botPlayer = response.getBotPlayer();
+        enemyPlayer = response.getEnemyPlayer();
 
         if (playerColor.equals(PlayerColor.WHITE)) {
             BotResponse botResponse = gameService.getBotMove();
@@ -116,8 +123,8 @@ public class CommandLineHandler implements CommandLineRunner {
         String[] positionArray = position.split("");
         String xLetter = positionArray[0];
         int x = xTilePositionFromLetter(xLetter);
-        int y = Integer.parseInt(positionArray[1]);
-        var moveRequest = new MovePlayerMove(x, y).toRequest();
+        int y = convertCoordinateToResponse(Integer.parseInt(positionArray[1]));
+        var moveRequest = new MovePlayerMove(x, y).toRequest(enemyPlayer.getId());
         gameService.makeMove(moveRequest);
         String botResponse = getBotResponse();
         out(botResponse);
@@ -129,8 +136,9 @@ public class CommandLineHandler implements CommandLineRunner {
         String[] positionArray = position.split("");
         String xLetter = positionArray[0];
         int x = xTilePositionFromLetter(xLetter);
-        int y = Integer.parseInt(positionArray[1]);
-        // TODO: enemy player move: gameService.makeJump(x, y);
+        int y = convertCoordinateToResponse(Integer.parseInt(positionArray[1]));
+        var jumpRequest = new MovePlayerMove(x, y).toRequest(enemyPlayer.getId());
+        gameService.makeJump(jumpRequest);
         String botResponse = getBotResponse();
         out(botResponse);
     }
@@ -141,10 +149,10 @@ public class CommandLineHandler implements CommandLineRunner {
         String[] positionArray = position.split("");
         String xLetter = positionArray[0];
         int x = xWallPositionFromLetter(xLetter);
-        int y = Integer.parseInt(positionArray[1]);
+        int y = convertCoordinateToResponse(Integer.parseInt(positionArray[1]));
         String orientationString = positionArray[2];
         Orientation orientation = orientationString.equals("v") ? Orientation.VERTICAL : Orientation.HORIZONTAL;
-        var placeWallRequest = new PlaceWallMove(x, y, orientation).toRequest();
+        var placeWallRequest = new PlaceWallMove(x, y, orientation).toRequest(enemyPlayer.getId());
         gameService.placeWall(placeWallRequest);
         String botResponse = getBotResponse();
         out(botResponse);
@@ -158,13 +166,18 @@ public class CommandLineHandler implements CommandLineRunner {
     }
 
     private String getBotResponse() {
-        // TODO: our bot player response: Move move = gameService.getBotPlayerMove();
-        // Orientation orientation = move.getOrientation();
-        // String xResponse = orientation == null ? tileLetterFromX(move.getX()) : wallLetterFromX(move.getX());
-        // int yResponse = move.getY();
-        // String response = move.getType().toString() + " " + xResponse + yResponse;
-        // if (orientation != null) response += "orientation.getLetter()";
-        return "response";
+        BotResponse botResponse = gameService.getBotMove();
+        Orientation orientation = botResponse.getOrientation();
+        String xResponse = orientation == Orientation.NONE
+                ? tileLetterFromX(convertCoordinateToResponse(botResponse.getXCorner()))
+                : wallLetterFromX(convertCoordinateToResponse(botResponse.getXCorner()));
+        int yResponse = convertCoordinateToResponse(botResponse.getYCorner());
+        // TODO: implement type of move (move, jump, wall) String response = move.getType().toString() + " " + xResponse + yResponse;
+        String moveName = orientation == null ? "move" : "wall";
+        String orientationLetter = orientation == Orientation.HORIZONTAL ? "h" : "v";
+        String response = moveName + " " + xResponse + yResponse;
+        if (orientation != Orientation.NONE) response += orientationLetter;
+        return response;
     }
 
     private int xTilePositionFromLetter(String letter) {
